@@ -58,5 +58,19 @@ print(nli)
 nli.clear()
 nli=[x if x!="[DATA" else "DELETED]" for x in li]
 print(nli)
+nli.clear()
+nli=[1,2,3,4,5,6,156132,3213,-32,4556]
 nli.sort()
 print(nli)
+nli.reverse()
+print(nli)
+def Nth(z): # функция возвращающая занчение, которое значит на сколько далеко число от 3000
+   return abs(z-3000)
+nli.sort(key=Nth)# для сортировки можно задать параметр чере функцию
+print(nli)
+nli=li.copy()#мы не можем писать nli=li, так как тогда мы по сути просто присвоим строке li ещё одно имя nli. Изменения в одной будут влиять на другую
+#or nli=list(li)
+nli.clear()
+nli=[1,2,3,4,5,6,156132,3213,-32,4556]
+li1=li+nli
+print(li1)
