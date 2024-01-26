@@ -24,3 +24,22 @@ li.remove(12j)
 li.pop(5)
 del li[8]
 print(li)
+del li1     # delete all list 
+#or
+#li1.clear()
+for x in li:
+    print(x)
+print("")
+for i in range(len(li)):
+  print(li[i])
+n=0
+while n < len(li):
+  print(li[n])
+  n = n + 1
+nli=[]
+print("New list:")
+li.remove(120)
+for x in li:
+   if 'a' in x:
+      nli.append(x)
+print(nli)
