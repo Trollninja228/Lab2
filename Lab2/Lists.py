@@ -39,7 +39,24 @@ while n < len(li):
 nli=[]
 print("New list:")
 li.remove(120)
-for x in li:
+for x in li: # or newlist = [x for x in fruits if "a" in x], правда второй варик пока не сильно понимаю
    if 'a' in x:
       nli.append(x)
+print(nli)
+nli.clear()
+nli=[x for x in li if x =="DELETED]" or x=="[DATA"]# хотя вроде разобрался
+print(nli)
+nli.clear()
+nli=[x for x in range(25) if x%2==0 and x!=0]
+print(nli)
+nli.clear()
+nli=[x.upper() for x in li]
+print(nli)
+nli.clear()
+nli=["DELETED" for x in li]
+print(nli)
+nli.clear()
+nli=[x if x!="[DATA" else "DELETED]" for x in li]
+print(nli)
+nli.sort()
 print(nli)
