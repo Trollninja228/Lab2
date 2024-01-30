@@ -26,3 +26,7 @@ i=0
 while i <len(tup1):
     print(tup1[i])
     i+=1
+tup*=2
+print(tup)
+print(tup.count("New?"))
+print(tup.index("New?"))
