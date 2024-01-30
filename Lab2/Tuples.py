@@ -22,3 +22,7 @@ print(two)
 print(three)
 for x in tup:
     print(x)
+i=0
+while i <len(tup1):
+    print(tup1[i])
+    i+=1
