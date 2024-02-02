@@ -1,4 +1,18 @@
-li=["acroba",'bravo','comrado',15321,11.5,12j]
-nli=li
-nli.pop(0)
-print(li)
+Ford = {
+    "model" : "Mustang",
+    "year" : 1986
+  }
+Lada = {
+    "model" : "Niva",
+    "year" : 1990
+  }
+Nissan = {
+    "model" : "Elgrand",
+    "year" : 1990
+  }
+cars={
+    "Ford":Ford,
+    "Lada":Lada,
+    "Nissan":Nissan,
+}
+print(cars["Ford"]["year"])
