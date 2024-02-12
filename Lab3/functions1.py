@@ -25,7 +25,6 @@ def filter_prime(s):
 list=[123,13,17,3,5,9,21,31,51,41]
 print(filter_prime(list))
 from itertools import permutations
-
 def print_permutations(s):
     prms = permutations(s)
     for prm in prms:
@@ -77,12 +76,58 @@ def Unique(l):
   while i<len(l)-1:
     j=i+1
     while j<len(l):
-      q=0
+      q=1
       if l[i]==l[j]:
-        del l[j]
-        q=1
-      if not q:
+        l=l[:j]+l[j+1:]
+        q=0
+      if q:
         j+=1
+    i+=1
   print(l)
 test_li="Testttes"
 Unique(test_li)
+def palindrome(s):
+   i=0
+   j=len(s)-1
+   while i<len(s):
+      if not s[i]==s[j]:
+         return False
+      i+=1
+      j-=1
+   return True
+s="ababa"
+s1="abca"
+print(palindrome(s))
+print(palindrome(s1))
+def histogram(li):
+   i=0
+   while i<len(li):
+      s=""
+      j=0
+      while j<li[i]:
+         j+=1
+         s+="*"
+      print(s)
+      i+=1
+histogram([4, 9, 7])
+import random
+def game():
+   print("Hello! What is your name?")
+   name=input()
+   number=random.randint(1,20)
+   print("Well, "+name+", I am thinking of a number between 1 and 20.")
+   print("Take a guess.")
+   n=int(input())
+   i=0
+   while not n==number:
+      i+=1
+      if(n<number):
+         print("Your guess is too low.")
+         print("Take a guess.")
+      else:
+         print("Your guess is too high.")
+         print("Take a guess.")
+      n=int(input())
+   i+=1
+   print("Good job, "+name+"! You guessed my number in",i,"guesses!")
+game()

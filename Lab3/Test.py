@@ -14,3 +14,17 @@ y=[1,12,13,17,19]
 del y[0]
 print(len(y))
 print(y[-1])
+str="Testt"
+print(len(str))
+str=str.replace("t","")
+print(str)
+print(len(str))
+S = "abcd"
+Index=1 #index of string to remove
+ListS = list(S)
+ListS.pop(Index)
+S = "".join(ListS)
+print (S)
+def game():
+   name=input("Hello! What is your name?")
+game()
