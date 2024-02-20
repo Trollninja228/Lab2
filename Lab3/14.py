@@ -1,2 +1,2 @@
-from functions1 import game 
+from functions1 import game
 game()
