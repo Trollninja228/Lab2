@@ -12,3 +12,24 @@ sn=snake.split("_")
 for x in sn:
     camel+=x.capitalize()
 print(camel)
+c=re.findall("[A-Z]'*[a-z]*",camel)
+print(c)
+some=""
+for x in c:
+    some+=x+" "
+print(some)
+sth=""
+for x in c:
+    al=list(x)
+    q=al[0].lower()
+    al.pop(0)
+    sth+=q
+    for y in al:
+        sth+=y
+    sth+="_"
+sth=list(sth)
+sth.pop(len(sth)-1)
+string=""
+for x in sth:
+    string+=str(x)
+print(string)
