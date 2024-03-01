@@ -11,7 +11,7 @@ for path in pathes:
     print("DIR",os.path.isdir(path))
 
 #creating files
-dir="EXAMPLE"
+dir="C:/Users/Пчел/Desktop/Labs/Lab6/EXAMPLE"
 print(os.listdir(dir))
 '''for i in range(1,31):
     file=open(f"{dir}{i}.txt","x") 
@@ -46,7 +46,7 @@ os.rmdir("smt")
 #append to the file and creating it if the file doesn't exist
 file=open("ex3.txt","a")
 file.write("\nOr no?")
-
+file.close()
 #check if the file exist
 path="ex2.txt"
 print(os.path.exists(path))
