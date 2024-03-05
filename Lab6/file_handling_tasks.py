@@ -61,4 +61,14 @@ file1.close()
 file2.close()
 
 #8
-
+file= open("C:/Users/Пчел/Desktop/Labs/Lab6/delete.txt","x")
+file.close()
+path1='C:/Users/Пчел/Desktop/Labs/Lab6/delete.txt'
+if os.path.exists(path1):
+    if os.access(path1,os.W_OK):
+        os.remove(path1)
+        print("File is deleted")
+    else:
+        print("We haven't access")
+else:
+        print("File isn't exist")
