@@ -1,43 +1,37 @@
 import pygame
-import sys
 import math
 
 pygame.init()
 
-# Set up the display
+# Установка дисплея
 screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
 
-# Define the rectangle
-rect_width = 100
-rect_height = 200
-rect = pygame.Rect(0, 0, rect_width, rect_height)
-rect.center = (400, 300)  # Center of the screen
-color = (0, 255, 0)
+# Загрузка изображения стрелки
+arrow_image = pygame.image.load("Left_hand.png")
+arrow_rect = arrow_image.get_rect()
+
+# Определение параметров центра экрана
+center = (400, 300)
 
 angle = 0
 
-# Main game loop
+# Главный игровой цикл
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    # Clear the screen
+    # Очистка экрана
     screen.fill((0, 0, 0))
 
-    # Calculate the new position of the rectangle after rotation
-    angle_rad = math.radians(angle)
-    rotated_x = rect.centerx + math.cos(angle_rad) * (rect.width / 2)
-    rotated_y = rect.centery - math.sin(angle_rad) * (rect.height / 2)
+    # Поворот изображения стрелки
+    rotated_arrow = pygame.transform.rotate(arrow_image, -angle)
+    rotated_rect = rotated_arrow.get_rect(center=center)
 
-    # Create the rotated rectangle
-    rotated_rect = pygame.Rect(0, 0, rect.width, rect.height)
-    rotated_rect.center = (rotated_x, rotated_y)
-
-    # Draw the rotated rectangle onto the screen
-    pygame.draw.rect(screen, color, rotated_rect)
+    # Отрисовка повернутой стрелки
+    screen.blit(rotated_arrow, rotated_rect)
 
     angle += 1
     if angle >= 360:
@@ -46,5 +40,3 @@ while running:
     pygame.display.flip()
     clock.tick(60)
 
-pygame.quit()
-sys.exit()
