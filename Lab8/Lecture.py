@@ -36,5 +36,5 @@ while done:
     #     screen.fill((0,0,0))
     if LMBpressed:
         screen.blit(baseLayear,(0,0))
-        pygame.draw.rect(screen,(225,0,0),calculate_rect(prevX,curvX,prevY,curvY),2)
+        pygame.draw.rect(screen,('magenta'),calculate_rect(prevX,curvX,prevY,curvY),2)
     pygame.display.flip()
