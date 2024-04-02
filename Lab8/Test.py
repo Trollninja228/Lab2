@@ -27,8 +27,8 @@ enemy_x=randomizer()
 enemy.rect=enemy.image.get_rect()
 enemy.rect.center=(enemy_x,enemy_y)
 while done:
-    pygame.draw.rect(screen,'red',pygame.Rect(enemy.rect[0],enemy.rect[1],enemy.rect[2],enemy.rect[3]))
-    print(enemy.rect[0],enemy.rect[1],enemy.rect[2],enemy.rect[3])
+    pygame.draw.rect(screen,'red',enemy.rect,10)
+    print(enemy.rect[3])
     if pygame.sprite.spritecollideany(player,enemies):
         done=False
     for event in pygame.event.get():
