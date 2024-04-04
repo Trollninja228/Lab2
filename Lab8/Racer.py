@@ -6,52 +6,71 @@ pygame.init()
 done=True
 screen=pygame.display.set_mode((400,600))
 FPS=pygame.time.Clock()
+font = pygame.font.SysFont("Times New Roman", 60)
+game_over=font.render("WASTED",True,'black')
 x=175
-y=510
-speed=5
+y=550
+speed=10
+score=0
 background=pygame.image.load("C:/Users/Пчел/Desktop/Labs/Lab8/Racer/AnimatedStreet.png")
-background_music=pygame.mixer.Sound("C:/Users/Пчел/Desktop/Labs/Lab8/Racer/background.wav")
-enemy=pygame.sprite.Sprite()
-player=pygame.sprite.Sprite()
-player.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/Lab8/Racer/Player.png")
-enemy.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/Lab8/Racer/Enemy.png")
-player.rect=player.image.get_rect()
-background_music.play(-1)
+background_music="C:/Users/Пчел/Desktop/Labs/Lab8/Racer/background.wav"
+crash="C:/Users/Пчел/Desktop/Labs/Lab8/Racer/wasted.mp3"
+pygame.mixer.music.load(background_music)
+pygame.mixer.music.play(-1)
 pygame.display.set_caption("Sad story")
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/Lab8/Racer/Enemy.png")
+        self.rect=self.image.get_rect()
+        self.rect.center=(randomizer(),0)
+    def move(self):
+        global score
+        self.rect.move_ip(0,speed)
+        if(self.rect.top>600):
+            score+=1
+            self.rect.top=0
+            self.rect.center=(randomizer(),0)
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/Lab8/Racer/Player.png")
+        self.rect=self.image.get_rect()
+        self.rect.center=(x,y)
+    def move(self):
+        if not self.rect.left==0:
+            if not self.rect.right==400:
+                key=pygame.key.get_pressed()
+                if key[pygame.K_a]:
+                    self.rect.move_ip(-speed,0)
+                if key[pygame.K_d]:
+                    self.rect.move_ip(speed,0)
 enemies=pygame.sprite.Group()
 players=pygame.sprite.Group()
+enemy=Enemy()
+player=Player()
 enemies.add(enemy)
 players.add(player)
-enemy_y=0
-enemy_x=randomizer()
-enemy.rect=enemy.image.get_rect()
-enemy.rect.center=(enemy_x,enemy_y)
 while done:
-    pygame.draw.rect(screen,'red',pygame.Rect(enemy.rect[0],enemy.rect[1],enemy.rect[2],enemy.rect[3]))
-    print(enemy.rect[0],enemy.rect[1],enemy.rect[2],enemy.rect[3])
-    if pygame.sprite.spritecollideany(player,enemies):
-        done=False
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             done=False
-    key=pygame.key.get_pressed()
-    if key[pygame.K_a]:
-        if not x-10==0 and not x-10<0:
-            x-=10
-    if key[pygame.K_d]:
-        if not x+55==400 and not x+55>400:
-            x+=10
     screen.blit(background,(0,0))
-    enemy.rect.center=(enemy_x,enemy_y)
-    if speed==600 or speed>600:
-        speed=0
-        enemy_x=randomizer()
-        enemy_y=0
-        screen.blit(enemy.image,(enemy_x,enemy_y))
-    else:
-        enemy.rect.move_ip(0,speed)
-        speed+=5
+    Score=font.render(str(score),True,'black')
+    screen.blit(Score,(10,10))
+    player.move()
+    enemy.move()
+    screen.blit(player.image,player.rect)
     screen.blit(enemy.image,enemy.rect)
-    screen.blit(player.image,(x,y))
+    if pygame.sprite.spritecollideany(player,enemies):
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load(crash)
+        pygame.mixer.music.play()
+        screen.fill('red')
+        screen.blit(game_over,(60,250))
+        pygame.display.flip()
+        FPS.tick(1)
+        FPS.tick(2)
+        done=False
     pygame.display.flip()
     FPS.tick(60)
