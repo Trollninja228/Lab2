@@ -7,6 +7,8 @@ FPS=pygame.time.Clock()
 screen=pygame.display.set_mode((WIDTH,HEIGHT))
 done=True
 cell=30
+font = pygame.font.SysFont("Times New Roman", 60)
+game_over=font.render("GAME OVER",True,'white')
 class Point:
     def __init__(self,x,y):
         self.x=x
@@ -24,10 +26,17 @@ class Snake:
         for segment in self.body[1:]:
             pygame.draw.rect(screen,'yellow',(segment.x,segment.y,cell,cell))
     def move(self):
+        global done
         for i in range(len(self.body)-1,0,-1):
             if not i==1:
                 if self.body[i].x==self.body[0].x and self.body[i].y==self.body[0].y:
-                    pygame.draw.circle(screen,'red',(360,360),100,10)
+                    screen.fill('black')
+                    screen.blit(game_over,(180,310))
+                    pygame.display.flip()
+                    FPS.tick(1)
+                    FPS.tick(1)
+                    FPS.tick(1)
+                    done=False
             self.body[i].x=self.body[i-1].x
             self.body[i].y=self.body[i-1].y
         self.body[0].x+=self.dx*cell

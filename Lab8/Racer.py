@@ -38,13 +38,13 @@ class Player(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         self.rect.center=(x,y)
     def move(self):
-        if not self.rect.left==0:
-            if not self.rect.right==400:
-                key=pygame.key.get_pressed()
-                if key[pygame.K_a]:
-                    self.rect.move_ip(-speed,0)
-                if key[pygame.K_d]:
-                    self.rect.move_ip(speed,0)
+        key=pygame.key.get_pressed()
+        if not self.rect.left<0:
+            if key[pygame.K_a]:
+                self.rect.move_ip(-speed,0)
+        if not self.rect.right>400:
+            if key[pygame.K_d]:
+                self.rect.move_ip(speed,0)
 enemies=pygame.sprite.Group()
 players=pygame.sprite.Group()
 enemy=Enemy()
@@ -70,7 +70,9 @@ while done:
         screen.blit(game_over,(60,250))
         pygame.display.flip()
         FPS.tick(1)
-        FPS.tick(2)
+        FPS.tick(1)
+        FPS.tick(1)
+        FPS.tick(1)
         done=False
     pygame.display.flip()
     FPS.tick(60)
