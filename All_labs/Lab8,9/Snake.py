@@ -4,11 +4,14 @@ pygame.init()
 WIDTH=720
 HEIGHT=720
 FPS=pygame.time.Clock()
-screen=pygame.display.set_mode((WIDTH,HEIGHT))
+screen=pygame.display.set_mode((720,800))
 done=True
 cell=30
+count=0
 font = pygame.font.SysFont("Times New Roman", 60)
+small_font=pygame.font.SysFont("Times New Roman", 30)
 game_over=font.render("GAME OVER",True,'white')
+t_count=small_font.render(str(count),True,"white")
 class Point:
     def __init__(self,x,y):
         self.x=x
@@ -63,8 +66,11 @@ class Food:
 snake=Snake()
 food=Food()
 snake.grow()
+screen.blit(t_count,(100,760))
 while done:
     if food.pos.x==snake.body[0].x and food.pos.y==snake.body[0].y:
+        count+=1
+        t_count=small_font.render(str(count),True,"white")
         food.regenerate()
         snake.grow()
     for event in pygame.event.get():
@@ -92,5 +98,6 @@ while done:
     snake.draw()
     food.draw()
     snake.move()
+    screen.blit(t_count,(70,760))
     pygame.display.flip()
     FPS.tick(10)

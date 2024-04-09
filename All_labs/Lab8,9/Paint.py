@@ -12,6 +12,9 @@ HEIGHT = 480
 baseLayer = pygame.Surface((WIDTH, HEIGHT))
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 done = True
+tool=1
+rad_of_er=5
+color='orange'
 
 def calc_rect(x1, x2, y1, y2):
     return pygame.Rect(min(x1, x2), min(y1, y2), abs(x1 - x2), abs(y1 - y2))
@@ -41,11 +44,34 @@ while done:
             curvX = event.pos[0]
             curvY = event.pos[1]
             baseLayer.blit(screen, (0, 0))  # Сохраняем текущий слой в baseLayer
-
+        if event.type==pygame.KEYDOWN:
+            if event.key==pygame.K_1:
+                tool=1
+            if event.key==pygame.K_2:
+                tool=2
+            if event.key==pygame.K_3:
+                tool=3
+            if event.key==pygame.K_KP_PLUS:
+                rad_of_er+=2
+            if event.key==pygame.K_KP_MINUS:
+                rad_of_er+=-2
+            if event.key==pygame.K_r:
+                color="red"
+            if event.key==pygame.K_b:
+                color="blue"
+            if event.key==pygame.K_g:
+                color="green"
+            if event.key==pygame.K_o:
+                color="orange"
     if LMBpressed:
-        screen.blit(baseLayer, (0, 0))  # Отрисовываем сохранённый слой на экране
-        rect = calc_rect(prevX, curvX, prevY, curvY)
-        circle_coords = calc_circle(prevX, prevY, curvX, curvY)
-        pygame.draw.rect(screen, 'magenta', rect, 2)  # Рисуем прямоугольник на экране
-        pygame.draw.circle(screen, 'orange', (circle_coords[0], circle_coords[1]), circle_coords[2])  # Рисуем круг
+        if tool==3:
+            pygame.draw.circle(screen, 'black',(curvX,curvY), rad_of_er)  # Ластик
+        elif tool==1:
+            screen.blit(baseLayer, (0, 0))  # Отрисовываем сохранённый слой на экране
+            rect = calc_rect(prevX, curvX, prevY, curvY)
+            pygame.draw.rect(screen, color, rect, 2)  # Рисуем прямоугольник на экране
+        elif tool==2:
+            screen.blit(baseLayer, (0, 0))  # Отрисовываем сохранённый слой на экране
+            circle_coords = calc_circle(prevX, prevY, curvX, curvY)
+            pygame.draw.circle(screen, color, (circle_coords[0], circle_coords[1]), circle_coords[2])  # Рисуем круг
     pygame.display.flip()  # Обновляем экран

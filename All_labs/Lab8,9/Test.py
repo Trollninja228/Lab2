@@ -1,51 +1,107 @@
 import pygame
+import random
+def randomizer():
+     return random.randint(50,350)
 pygame.init()
-
-# Определение переменных и инициализация окна
-prevX = -1
-prevY = -1
-curvX = -1
-curvY = -1
-LMBpressed = False
-WIDTH = 800
-HEIGHT = 480
-baseLayer = pygame.Surface((WIDTH, HEIGHT))
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-done = True
-
-def calc_rect(x1, x2, y1, y2):
-    return pygame.Rect(min(x1, x2), min(y1, y2), abs(x1 - x2), abs(y1 - y2))
-
-def calc_circle(x1, y1, x2, y2):
-    centerX = (x1 + x2) // 2
-    centerY = (y1 + y2) // 2
-    radius = min(abs(x1 - x2) // 2, abs(y1 - y2) // 2)
-    return centerX, centerY, radius
-
+done=True
+screen=pygame.display.set_mode((400,600))
+FPS=pygame.time.Clock()
+font = pygame.font.SysFont("Times New Roman", 60)
+game_over=font.render("WASTED",True,'black')
+x=175
+y=550
+speed=10
+score=0
+n_coins=0
+background=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/AnimatedStreet.png")
+background_music="C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/background.wav"
+crash="C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/wasted.mp3"
+pygame.mixer.music.load(background_music)
+pygame.mixer.music.play(-1)
+pygame.display.set_caption("Sad story")
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/Enemy.png")
+        self.rect=self.image.get_rect()
+        self.rect.center=(randomizer(),0)
+    def move(self):
+        global score
+        self.rect.move_ip(0,speed)
+        if(self.rect.top>600):
+            score+=1
+            self.rect.top=0
+            self.rect.center=(randomizer(),0)
+class Coin(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.out=False
+        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/coin.png")
+        self.rect=self.image.get_rect()
+        self.rect.center=(randomizer(),0)
+    def move(self):
+        global score
+        if not self.out:
+            self.rect.move_ip(0,speed)
+        if(self.rect.top>700):
+            self.out=True
+            if random.randint(0,100)==99:
+                self.rect.center=(randomizer(),0)
+                self.out=False
+    def regenerate(self):
+        self.rect.center=(randomizer(),0)
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/Player.png")
+        self.rect=self.image.get_rect()
+        self.rect.center=(x,y)
+    def move(self):
+        key=pygame.key.get_pressed()
+        if not self.rect.left<0:
+            if key[pygame.K_a]:
+                self.rect.move_ip(-speed,0)
+        if not self.rect.right>400:
+            if key[pygame.K_d]:
+                self.rect.move_ip(speed,0)
+enemies=pygame.sprite.Group()
+players=pygame.sprite.Group()
+buffs=pygame.sprite.Group()
+coin=Coin()
+enemy=Enemy()
+player=Player()
+enemies.add(enemy)
+players.add(player)
+buffs.add(coin)
 while done:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = False
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            LMBpressed = True
-            prevX = event.pos[0]
-            prevY = event.pos[1]
-            curvX = event.pos[0]
-            curvY = event.pos[1]
-        if event.type == pygame.MOUSEMOTION:
-            if LMBpressed:
-                curvX = event.pos[0]
-                curvY = event.pos[1]
-        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            LMBpressed = False
-            curvX = event.pos[0]
-            curvY = event.pos[1]
-            baseLayer.blit(screen, (0, 0))  # Сохраняем текущий слой в baseLayer
-
-    if LMBpressed:
-        screen.blit(baseLayer, (0, 0))  # Отрисовываем сохранённый слой на экране
-        rect = calc_rect(prevX, curvX, prevY, curvY)
-        circle_coords = calc_circle(prevX, prevY, curvX, curvY)
-        pygame.draw.rect(screen, 'magenta', rect, 2)  # Рисуем прямоугольник на экране
-        pygame.draw.circle(screen, 'orange', (circle_coords[0], circle_coords[1]), circle_coords[2])  # Рисуем круг
-    pygame.display.flip()  # Обновляем экран
+        if event.type==pygame.QUIT:
+            done=False
+    screen.blit(background,(0,0))
+    Score=font.render(str(score),True,'black')
+    t_n_coins=font.render(str(n_coins),True,'yellow')
+    screen.blit(Score,(10,10))
+    screen.blit(t_n_coins,(300,10))
+    player.move()
+    enemy.move()
+    coin.move()  # Перемещение монеты перед отрисовкой
+    screen.blit(player.image,player.rect)
+    screen.blit(enemy.image,enemy.rect)
+    screen.blit(coin.image,coin.rect)  # Отрисовка монеты после ее перемещения
+    if pygame.sprite.spritecollideany(coin,players):
+        coin.regenerate()
+        n_coins+=1
+    if pygame.sprite.spritecollideany(player,enemies):
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load(crash)
+        pygame.mixer.music.play()
+        screen.fill('red')
+        screen.blit(game_over,(60,250))
+        pygame.display.flip()
+        FPS.tick(1)
+        FPS.tick(1)
+        FPS.tick(1)
+        FPS.tick(1)
+        done=False
+    pygame.display.flip()
+    FPS.tick(60)
