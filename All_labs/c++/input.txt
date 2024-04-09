@@ -1,0 +1,6 @@
+5
+first 20.5
+second 30.5
+third 25.95
+Again 0
+Again 20

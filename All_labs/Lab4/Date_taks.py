@@ -1,0 +1,10 @@
+import datetime
+today=datetime.datetime.now()
+print(today-datetime.timedelta(days=5))
+yesterday=today-datetime.timedelta(days=1)
+tommorow=today+datetime.timedelta(days=1)
+print(yesterday)
+print(today)
+print(tommorow)
+print(today.strftime("microseconds: %f"))
+print("Difference between two days:",(today-yesterday).total_seconds())
