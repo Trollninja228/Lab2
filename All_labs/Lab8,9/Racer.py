@@ -18,6 +18,7 @@ background_music="C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/backgroun
 crash="C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/wasted.mp3"
 pygame.mixer.music.load(background_music)
 pygame.mixer.music.play(-1)
+
 pygame.display.set_caption("Sad story")
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -45,6 +46,9 @@ class Coin(pygame.sprite.Sprite):
             self.rect.move_ip(0,speed)
         if(self.rect.top>700):
             self.out=True
+            if random.randint(0,100)==99:
+                self.rect.center=(randomizer(),0)
+                self.out=False
     def regenerate(self):
         self.rect.center=(randomizer(),0)
 class Player(pygame.sprite.Sprite):
@@ -61,6 +65,12 @@ class Player(pygame.sprite.Sprite):
         if not self.rect.right>400:
             if key[pygame.K_d]:
                 self.rect.move_ip(speed,0)
+        if not self.rect.top<0:
+            if key[pygame.K_w]:
+                self.rect.move_ip(0,-speed)
+        if not self.rect.bottom>600:
+            if key[pygame.K_s]:
+                self.rect.move_ip(0,speed)
 enemies=pygame.sprite.Group()
 players=pygame.sprite.Group()
 buffs=pygame.sprite.Group()
@@ -81,8 +91,10 @@ while done:
     screen.blit(t_n_coins,(300,10))
     player.move()
     enemy.move()
+    coin.move()  # Перемещение монеты перед отрисовкой
     screen.blit(player.image,player.rect)
     screen.blit(enemy.image,enemy.rect)
+    screen.blit(coin.image,coin.rect)  # Отрисовка монеты после ее перемещения
     if pygame.sprite.spritecollideany(coin,players):
         coin.regenerate()
         n_coins+=1
@@ -93,9 +105,7 @@ while done:
         screen.fill('red')
         screen.blit(game_over,(60,250))
         pygame.display.flip()
-        FPS.tick(1)
-        FPS.tick(1)
-        FPS.tick(1)
+
         FPS.tick(1)
         done=False
     pygame.display.flip()

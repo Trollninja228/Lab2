@@ -1,107 +1,106 @@
 import pygame
 import random
-def randomizer():
-     return random.randint(50,350)
 pygame.init()
-done=True
-screen=pygame.display.set_mode((400,600))
+WIDTH=720
+HEIGHT=720
 FPS=pygame.time.Clock()
+screen=pygame.display.set_mode((720,800))
+done=True
+cell=30
+count=0
 font = pygame.font.SysFont("Times New Roman", 60)
-game_over=font.render("WASTED",True,'black')
-x=175
-y=550
-speed=10
-score=0
-n_coins=0
-background=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/AnimatedStreet.png")
-background_music="C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/background.wav"
-crash="C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/wasted.mp3"
-pygame.mixer.music.load(background_music)
-pygame.mixer.music.play(-1)
-pygame.display.set_caption("Sad story")
-class Enemy(pygame.sprite.Sprite):
+small_font=pygame.font.SysFont("Times New Roman", 30)
+game_over=font.render("GAME OVER",True,'white')
+t_count=small_font.render(str(count),True,"white")
+class Point:
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
+    def generate():
+        return Point(random.randint(0,WIDTH//cell-1)*cell,random.randint(0,HEIGHT//cell-1)*cell)
+class Snake:
     def __init__(self):
-        super().__init__()
-        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/Enemy.png")
-        self.rect=self.image.get_rect()
-        self.rect.center=(randomizer(),0)
+        self.body=[Point.generate()]
+        self.dx=1
+        self.dy=0
+    def draw(self):
+        head=self.body[0]
+        pygame.draw.rect(screen,'green',(head.x,head.y,cell,cell))
+        for segment in self.body[1:]:
+            pygame.draw.rect(screen,'yellow',(segment.x,segment.y,cell,cell))
     def move(self):
-        global score
-        self.rect.move_ip(0,speed)
-        if(self.rect.top>600):
-            score+=1
-            self.rect.top=0
-            self.rect.center=(randomizer(),0)
-class Coin(pygame.sprite.Sprite):
+        global done
+        for i in range(len(self.body)-1,0,-1):
+            if not i==1:
+                if self.body[i].x==self.body[0].x and self.body[i].y==self.body[0].y:
+                    screen.fill('black')
+                    screen.blit(game_over,(180,310))
+                    pygame.display.flip()
+                    FPS.tick(1)
+                    FPS.tick(1)
+                    FPS.tick(1)
+                    done=False
+            self.body[i].x=self.body[i-1].x
+            self.body[i].y=self.body[i-1].y
+        self.body[0].x+=self.dx*cell
+        self.body[0].y+=self.dy*cell
+        self.body[0].x %= WIDTH
+        self.body[0].y %= HEIGHT
+    def grow(self):
+        self.body.insert(0, Point(self.body[0].x, self.body[0].y))
+def draw_grid():
+    for i in range(0,720,cell):
+        for j in range(0,720,cell):
+            pygame.draw.rect(screen,'gray',(i,j,cell,cell),1)
+class Food:
     def __init__(self):
-        super().__init__()
-        self.out=False
-        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/coin.png")
-        self.rect=self.image.get_rect()
-        self.rect.center=(randomizer(),0)
-    def move(self):
-        global score
-        if not self.out:
-            self.rect.move_ip(0,speed)
-        if(self.rect.top>700):
-            self.out=True
-            if random.randint(0,100)==99:
-                self.rect.center=(randomizer(),0)
-                self.out=False
+        self.pos=Point.generate()
+        self.x=0
+        self.y=0
+    def draw(self):
+        pygame.draw.rect(screen,'red',(self.pos.x,self.pos.y,cell,cell))
     def regenerate(self):
-        self.rect.center=(randomizer(),0)
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/Player.png")
-        self.rect=self.image.get_rect()
-        self.rect.center=(x,y)
-    def move(self):
-        key=pygame.key.get_pressed()
-        if not self.rect.left<0:
-            if key[pygame.K_a]:
-                self.rect.move_ip(-speed,0)
-        if not self.rect.right>400:
-            if key[pygame.K_d]:
-                self.rect.move_ip(speed,0)
-enemies=pygame.sprite.Group()
-players=pygame.sprite.Group()
-buffs=pygame.sprite.Group()
-coin=Coin()
-enemy=Enemy()
-player=Player()
-enemies.add(enemy)
-players.add(player)
-buffs.add(coin)
+        check= True
+        while check:
+            if not self.x==-
+            self.pos=Point.generate()
+        self.x=0
+        self.y=0
+snake=Snake()
+food=Food()
+snake.grow()
+screen.blit(t_count,(100,760))
 while done:
+    if food.pos.x==snake.body[0].x and food.pos.y==snake.body[0].y:
+        count+=1
+        t_count=small_font.render(str(count),True,"white")
+        food.regenerate()
+        snake.grow()
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             done=False
-    screen.blit(background,(0,0))
-    Score=font.render(str(score),True,'black')
-    t_n_coins=font.render(str(n_coins),True,'yellow')
-    screen.blit(Score,(10,10))
-    screen.blit(t_n_coins,(300,10))
-    player.move()
-    enemy.move()
-    coin.move()  # Перемещение монеты перед отрисовкой
-    screen.blit(player.image,player.rect)
-    screen.blit(enemy.image,enemy.rect)
-    screen.blit(coin.image,coin.rect)  # Отрисовка монеты после ее перемещения
-    if pygame.sprite.spritecollideany(coin,players):
-        coin.regenerate()
-        n_coins+=1
-    if pygame.sprite.spritecollideany(player,enemies):
-        pygame.mixer.music.stop()
-        pygame.mixer.music.load(crash)
-        pygame.mixer.music.play()
-        screen.fill('red')
-        screen.blit(game_over,(60,250))
-        pygame.display.flip()
-        FPS.tick(1)
-        FPS.tick(1)
-        FPS.tick(1)
-        FPS.tick(1)
-        done=False
+    if event.type==pygame.KEYDOWN:
+        if event.key == pygame.K_RIGHT:
+            if not snake.dx==-1:
+                snake.dx=1
+                snake.dy=0
+        elif event.key == pygame.K_LEFT:
+            if not snake.dx==1:
+                snake.dx=-1
+                snake.dy=0
+        elif event.key == pygame.K_UP:
+            if not snake.dy==1:
+                snake.dx=0
+                snake.dy=-1
+        elif event.key == pygame.K_DOWN:
+            if not snake.dy==-1:
+                snake.dx=0
+                snake.dy=1
+    screen.fill((0,0,0))
+    draw_grid()
+    snake.draw()
+    food.draw()
+    snake.move()
+    screen.blit(t_count,(70,760))
     pygame.display.flip()
-    FPS.tick(60)
+    FPS.tick(10)
