@@ -28,6 +28,7 @@ with open(filename,"r") as csvfile:
     for row in csvreader:
         name,id,study_year,phone_number=row
         study_year=int(study_year)
-        cur.execute("""INSERT INTO students_data(name, id, study_year, phone_number) 
-                       VALUES ('{name}', '{id}', {study_year}, '{phone_number}')""")
+        string=f"""INSERT INTO students_data(name, id, study_year, phone_number) 
+                       VALUES ('{name}', '{id}', {study_year}, '{phone_number}');"""
+        cur.execute(string)
 conn.commit()
