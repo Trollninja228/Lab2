@@ -38,13 +38,13 @@ while done:
     elif action=="stop":
         done=False
     elif action=="c":
-        path_to_file="C:/Users/Пчел/Desktop/Labs/All_labs/Lab10/"+input("enter name of file>>")
+        path_to_file="C:/Users/Пчел/Desktop/Labs/All_labs/Lab10,11/"+input("enter name of file>>")
         # path_to_file="C:/Users/Пчел/Desktop/Labs/All_labs/Lab10/PhoneBook_csv.csv"
         with open(path_to_file,"r") as csvfile:
             csvreader=csv.reader(csvfile,delimiter=",")
             for row in csvreader:
                 id,name,phone_number=row
-                command=f"""INSERT INTO students_data(id,name,phone_number) 
+                command=f"""INSERT INTO main_data(id,name,phone_number) 
                         VALUES ('{id}','{name}','{phone_number}');"""
                 cur.execute(command)
                 conn.commit()
