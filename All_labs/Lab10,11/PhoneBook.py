@@ -9,7 +9,7 @@ conn=psycopg2.connect(
 cur=conn.cursor()
 done=True
 while done:
-    action=input("If you want to update table from command line press \"u\",from csv file press\"c\". If you want do delete user press \"d\", to insert press \"i\". If you want to search user press \"s\".If you want to stop programm,write\"stop\". If you want use function print \"func\".If you want use procedure print \"proc\".>>")
+    action=input("If you want to update table from command line press \"u\",from csv file press\"c\". If you want do delete user press \"d\", to insert press \"i\". If you want to search user press \"s\".If you want to stop programm,write\"stop\". If you want use function print \"func\".If you want use procedure print \"proc#\" and number of procedure.>>")
     if action=="u":
         ID=input("ID:")
         check_id=True
@@ -66,8 +66,24 @@ while done:
     elif action=="func":
         cur.callproc('get_all_data',)
         print(cur.fetchall())
-    elif action=="proc":
+    elif action=="proc#1":
         id=input("enter ID>>")
         name=input("enter name>>")
         phone_number=input("enter phone_number>>")
         cur.execute(f"CALL insert_or_update_user('{id}','{name}','{phone_number}');")
+        conn.commit()
+    elif action=="proc#2":
+        num=input("How many people?>>")
+        num= int(num)
+        data=()
+        while not num == 0:
+            num-=1
+            id=input("enter ID>>")
+            name=input("enter name>>")
+            cur.execute(f"CALL insert_or_update_user('{id}','{name}','{phone_number}');")
+            conn.commit()
+    elif action=="proc#3":
+        name_table=input("enter name_table>>")
+        criteria=input("enter criteria>>")
+        cur.execute(f"CALL delete_data_by_criteria('{name_table}', '{criteria}');")
+        conn.commit()
