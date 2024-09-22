@@ -16,10 +16,11 @@ int main(){
 	v1[0]=-1;
 	for(int i=1;i<kol;i++){
 		for(int j=i-1;j>=0;j--){
-			if(v[j]<v[i]){
+			if(v[j]<=v[i]){
 				v1[i]=v[j];
 				break;
-			}else{
+			}
+			if(j==0){
 				v1[i]=-1;
 			}
 		}
