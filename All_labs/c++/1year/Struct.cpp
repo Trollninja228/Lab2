@@ -31,7 +31,7 @@ int main(){
 	int n;
 /*  s.id="23B001";
 	s.name="Timur";
-	s.age=18;
+	s.age=1100;
 	s.gpa=22.5;
 	*/
 	cin>>n;
