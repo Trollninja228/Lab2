@@ -56,5 +56,4 @@ int main() {
     long result = findMinMaxSum(arr, group);
     cout << result << endl;
 
-    return 0;
 }

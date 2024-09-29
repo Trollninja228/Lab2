@@ -1,6 +1,0 @@
-5
-23B0002 Student2 22 3.8
-23B0003 Student3 30 12.6
-23B0005 Student5 19 7.456
-23B0001 Student1 22 5.3
-23B0004 Student4 27 6.45
