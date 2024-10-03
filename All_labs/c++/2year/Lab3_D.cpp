@@ -1,97 +1,38 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-class Node
-{
-public:
+int count_in_range(vector<int> &a, int l, int r) {
+    return upper_bound(a.begin(), a.end(), r) - lower_bound(a.begin(), a.end(), l);
+}
 
-    Node* parent;
-    Node* left;
-    Node* right;
-    int value;
-
-    Node(int data){
-        parent = NULL;
-        left = NULL;
-        right = NULL;
-        value = data;
-    }
-};
-
-
-class BST
-{
-private:
-    Node* root;
-public:
-    BST(){
-        root = NULL;
-    }
-    ~BST(){
-        clear(root);
-    }
-    void clear(Node* node){
-        if(node){
-            clear(node->left);
-            clear(node->right);
-            delete node;
-            //cout<<"You lozer!"<<" ";
-        }
-    }
-
-    void insert(int newvalue){
-        Node* newNode = new Node(newvalue);
-        
-        Node* x = root;
-        Node* y = NULL;
-        while(x){
-            y = x;
-            if(newvalue<x->value)
-                x = x->left;
-            else
-                x = x->right;
-        }
-
-        if(y == NULL){
-            root = newNode;
-        }
-        else if(newvalue<y->value){
-            newNode->parent = y;
-            y->left = newNode;
-        }
-        else{
-            newNode->parent = y;
-            y->right = newNode;
-        }
-    }
-
-    void inOrderWalk(Node* node){
-        if(node){
-            inOrderWalk(node->left);
-            cout<<node->value<<" ";
-            inOrderWalk(node->right);
-        }
-    }
-
-    void print(){
-        inOrderWalk(root);
-    }
-};
-
-
-
-main(){
-
-    BST b;
-    int n,k;
-    cin>>n>>k; 
-    int el;
-    for (int i = 0; i < n; i++){
-        cin>>el;
-        b.insert(el);
+int main() {
+    int n, q;
+    cin >> n >> q;
+    
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
     }
     
+    sort(a.begin(), a.end());
+    
+    for (int i = 0; i < q; i++) {
+        int l1, r1, l2, r2;
+        cin >> l1 >> r1 >> l2 >> r2;
+        
+        int count1 = count_in_range(a, l1, r1);
+        int count2 = count_in_range(a, l2, r2);
+        
+        if (r1 >= l2 && r2 >= l1) {
+            int overlap = count_in_range(a, max(l1, l2), min(r1, r2));
+            cout << (count1 + count2 - overlap) << endl;
+        } else {
+            cout << (count1 + count2) << endl;
+        }
+    }
     
     return 0;
 }
