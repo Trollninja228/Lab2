@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
 using namespace std;
 
@@ -69,33 +70,16 @@ public:
     void inOrderWalk(Node* node){
         if(node){
             inOrderWalk(node->left);
-            cout<<node->value<<" ";
+            //cout<<node->value<<" ";
             inOrderWalk(node->right);
         }
     }
-    void inOrderWalk2(Node* node,int x){
-        if(node){
-            cout<<node->value<<" ";
-            inOrderWalk2(node->left,x);
-            inOrderWalk2(node->right,x);
-        }
-    }
-    void print(Node *start,int x){
-        inOrderWalk2(start,x);
-    }
-    int count_of_ch(Node *node, int& count){
-        if(node){
-            //cout<<2<<endl;
-            count++;
-            count_of_ch(node->left,count);
-            count_of_ch(node->right,count);
-        }
-        return count;
+    void print(Node *start){
+        inOrderWalk(start);
     }
     Node *search(int x){
         Node *node=root;
         while(node->value!=x){
-            //cout<<node->value<<endl;
             if(node->value<x){
                 node=node->right;
             }
@@ -105,52 +89,36 @@ public:
         }
         return node;
     }
-
-    void sum_of(int left, int right){
-        
-        cout << find_levels(root, left, right);
-    }
-    int find_levels(Node*node, int left, int right){
-        
-            if(node){
-                find_levels(node->right, left, right);
-                left++;
-                cout<<node->value<<" ";
-                find_levels(node->left, left, right);
-                right++;
-            }
-        
-        return max(left, right);
-    }
-
-    void find_sum_of_levels(){
-        Node *newnode = root;
-        int left = 0;
-        while(newnode){
-            newnode = newnode->left;
-            left++;
+    int calc_level(Node *node){
+        int i=0;
+        while(node->parent){
+            i++;
+            node=node->parent;
         }
+        return i;
     }
-    int find_size(int x){
+    vector<pair<int,int> > inOrderWalk2(Node* node, vector<pair<int,int> > &v){
+        if(node){
+            inOrderWalk2(node->left, v);
+            pair<int,int> p;
+            p.first=calc_level(node);
+            p.second=node->value;
+            //cout<<p.first<<" "<<p.second<<endl;
+            v.push_back(p);
+            inOrderWalk2(node->right, v);
+        }
+        return v;
+    }
+    vector<pair<int,int> > calc_sum(){
+        pair<int,int> p;
+        vector<pair<int,int> > v;
         Node *node=root;
-        while(node->value!=x){
-            //cout<<node->value<<endl;
-            if(node->value<x){
-                node=node->right;
-            }
-            if(node->value>x){
-                node=node->left;
-            }
-        }
-        int count=0;
-        int size=count_of_ch(node,count);
-        return size;
+        v=inOrderWalk2(node,v);
+        return v;
     }
 };
 
-
-
-main(){
+int main(){
 
     BST b;
     int n;
@@ -161,10 +129,27 @@ main(){
         cin>>el;
         b.insert(el);
     }
-    
-    b.sum_of(0, 0);
-    
-    
+    vector<pair<int,int> > v;
+    vector<int> v1;
+    v=b.calc_sum();
+    sort(v.begin(),v.end());
+    int sum;
+    for (int i = 0; i<v.size(); i++){
+        // if(i++!=v.size()){
+            sum=v[i].second;
+            while(v[i].first==v[i+1].first){
+                
+                sum+=v[i+1].second;
+                i++;
+            }
+            v1.push_back(sum);
+        // }
+    }
+    cout<<v1.size()<<endl;
+    for (int i = 0; i < v1.size(); i++)
+    {
+        cout<<v1[i]<<" ";
+    }
     
     return 0;
 }
