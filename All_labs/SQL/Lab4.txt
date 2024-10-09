@@ -1,0 +1,34 @@
+--1.	Retrieve all airline names in uppercase.
+SELECT upper(airline_name) FROM airline;
+--2.	Replace any occurrence of the word "Air" in airline names with "Aero".
+UPDATE airline SET airline_name= REPLACE  ('Air', 'Aero');
+select airline_name FROM airline;
+--3
+SELECT (flight_id,airline_id) FROM flights WHERE airline_id=1 OR airline_id=2;
+--4
+SELECT airport_name FROM airport where airport_name ILIKE '%Air%' OR airport_name ILIKE '%Reginal%';
+--5
+SELECT first_name,last_name,(extract(month from date_of_birth),extract(day from date_of_birth),extract(year from date_of_birth)) AS date FROM passengers;
+--6
+SELECT flight_no FROM flights WHERE actual_arrival > scheduled_arrival;
+--7
+SELECT first_name, last_name, date_of_birth,
+       CASE
+           WHEN EXTRACT(YEAR FROM AGE(date_of_birth)) BETWEEN 18 AND 35 THEN 'Young'
+           WHEN EXTRACT(YEAR FROM AGE(date_of_birth)) BETWEEN 36 AND 55 THEN 'Adult'
+       END AS age_group
+FROM passengers;
+--8
+SELECT price,
+    CASE
+        WHEN price <12000 THEN 'CHEAP'
+        WHEN price BETWEEN 12000 AND 13000 THEN 'MEDIUM'
+        WHEN price >13000 THEN 'EXPENSIVE'
+    END AS mod_price
+FROM booking;
+--9
+SELECT airline_country, COUNT(airline_name) AS airline_count
+FROM airline
+GROUP BY airline_country;
+--10
+SELECT flight_no, scheduled_arrival, actual_arrival FROM flights WHERE actual_arrival > scheduled_arrival;
