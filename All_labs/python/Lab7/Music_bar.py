@@ -3,9 +3,9 @@ import pygame
 pygame.init()
 pygame.mixer.init()
 
-song1 = "C:/Users/Пчел/Desktop/Labs/Lab7/Music/Bedroom Prod, Frogmarionne feat. Yours Buttercup (YB) - ПЕШКИ.mp3"
-song2 = "C:/Users/Пчел/Desktop/Labs/Lab7/Music/cloudfield - Fantasy (ft. Reichuu).mp3"
-song3 = "C:/Users/Пчел/Desktop/Labs/Lab7/Music/Восход, Archmage Eternal, MrLololoshka feat. Размечталась, PryAnnya - Верный путь OST _Голос Времени_.mp3"
+song1 = "C:/Users/Пчел/Desktop/Labs/All_labs/python/Lab7/Music/Bedroom Prod, Frogmarionne feat. Yours Buttercup (YB) - ПЕШКИ.mp3"
+song2 = "C:/Users/Пчел/Desktop/Labs/All_labs/python/Lab7/Music/cloudfield - Fantasy (ft. Reichuu).mp3"
+song3 = "C:/Users/Пчел/Desktop/Labs/All_labs/python/Lab7/Music/Восход, Archmage Eternal, MrLololoshka feat. Размечталась, PryAnnya - Верный путь OST _Голос Времени_.mp3"
 
 pygame.display.set_mode((100, 100))
 running = True

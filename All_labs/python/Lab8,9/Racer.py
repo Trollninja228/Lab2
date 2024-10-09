@@ -13,9 +13,9 @@ y=550
 speed=10
 score=0
 n_coins=0
-background=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/AnimatedStreet.png")
-background_music="C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/background.wav"
-crash="C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/wasted.mp3"
+background=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/python/Lab8,9/Racer/AnimatedStreet.png")
+background_music="C:/Users/Пчел/Desktop/Labs/All_Labs/python/Lab8,9/Racer/background.wav"
+crash="C:/Users/Пчел/Desktop/Labs/All_Labs/python/Lab8,9/Racer/wasted.mp3"
 pygame.mixer.music.load(background_music)
 pygame.mixer.music.play(-1)
 
@@ -23,7 +23,7 @@ pygame.display.set_caption("Sad story")
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/Enemy.png")
+        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/python/Lab8,9/Racer/Enemy.png")
         self.rect=self.image.get_rect()
         self.rect.center=(randomizer(),0)
     def move(self):
@@ -37,7 +37,7 @@ class Coin(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.out=False
-        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/coin.png")
+        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/python/Lab8,9/Racer/coin.png")
         self.rect=self.image.get_rect()
         self.rect.center=(randomizer(),0)
     def move(self):
@@ -54,7 +54,7 @@ class Coin(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/Lab8,9/Racer/Player.png")
+        self.image=pygame.image.load("C:/Users/Пчел/Desktop/Labs/All_Labs/python/Lab8,9/Racer/Player.png")
         self.rect=self.image.get_rect()
         self.rect.center=(x,y)
     def move(self):
