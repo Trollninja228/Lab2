@@ -11,11 +11,11 @@ public:
     Node* right;
     int value;
 
-    Node(){
+    Node(int data){
         parent = NULL;
         left = NULL;
         right = NULL;
-        value = 0;
+        value = data;
     }
 };
 
@@ -81,13 +81,15 @@ public:
         if(node){
             inOrderWalk2(node->right,n);
             n+=node->value;
+            cout<<n;
             inOrderWalk2(node->left,n);
+            
         }
     }
     void sum(){
         int sum=0;
-        Node *node=new Node();
-        while(node->right!=nullptr){
+        Node *node=new Node(0);
+        while(node->right!=NULL){
             node=node->right;
         }
         int n=node->value;
@@ -109,6 +111,6 @@ main(){
         b.insert(el);
     }
     
-    b.print();
+    b.sum();
     return 0;
 }

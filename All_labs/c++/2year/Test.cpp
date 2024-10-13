@@ -1,122 +1,203 @@
 #include <iostream>
+#include <cstdlib>
+#include <cmath>
 #include <vector>
+#include <stdlib.h>
+#include <time.h>
 using namespace std;
+int partition(long long int *arr, int beg, int end){
+    srand(time(NULL));
 
+    int p = beg+rand()%(end-beg);//beg--end
+
+    swap(arr[end], arr[p]);
+
+    int i = beg - 1;
+    for(int j=beg;j<end;j++){
+        if(arr[j]<=arr[end]){
+            i++;
+            swap(arr[j],arr[i]);
+        }
+    }
+    swap(arr[end],arr[i+1]);
+    return i+1;
+}
+void quick_sort (long long int *arr, int beg, int end){
+    if(beg<end){
+        int p=partition(arr,beg,end);
+        quick_sort(arr,beg,p-1);
+        quick_sort(arr,p+1,end);
+    }
+    
+}
 class Heap {
 private:
-    long long int* content; // Массив для хранения элементов кучи
-    long long int heap_size; // Текущий размер кучи
-    long long int arr_size; // Максимальный размер массива
+    long long* content;
+    long long heap_size;
+    long long arr_size;
 public:
-    Heap(long long int* arr, long long int size) {
-        content = new long long int[size];
-        for (long long int i = 0; i < size; i++) {
-            content[i] = arr[i];
-        }
-        heap_size = size;
+    Heap(long long size) {
         arr_size = size;
-        buildMaxHeap(); // Строим кучу сразу при создании
+        heap_size = 0;
+        content = new long long[arr_size];
+        
     }
 
     ~Heap() {
-        delete[] content; // Освобождаем память
+        delete[] content;
     }
 
-    void print() {
-        for (long long int i = 0; i < heap_size; i++) {
-            cout << content[i] << " ";
-        }
-        cout << endl;
-    }
+    long long left(long long i) { return 2 * i + 1; }
+    long long right(long long i) { return 2 * i + 2; }
+    long long parent(long long i) { return (i - 1) / 2; }
 
-    long long int parent(long long int i) {
-        return (i - 1) / 2; // Индекс родительского узла
-    }
+    void minHeapify(long long i) {
+        long long least = i;
+        long long l = left(i);
+        long long r = right(i);
 
-    long long int left(long long int i) {
-        return (i * 2 + 1); // Индекс левого дочернего узла
-    }
-
-    long long int right(long long int i) {
-        return (i * 2 + 2); // Индекс правого дочернего узла
-    }
-
-    void maxHeapify(long long int i) {
-        long long int largest = i;
-        long long int l = left(i);
-        long long int r = right(i);
-
-        if (l < heap_size && content[l] < content[largest]) {
-            largest = l; // Находим наименьший элемент
-        }
-        if (r < heap_size && content[r] < content[largest]) {
-            largest = r; // Находим наименьший элемент
-        }
-
-        if (largest != i) {
-            swap(content[i], content[largest]); // Меняем местами
-            maxHeapify(largest); // Рекурсивно восстанавливаем кучу
+        if (l < heap_size && content[l] < content[least])
+            least = l;
+        if (r < heap_size && content[r] < content[least])
+            least = r;
+        if (least != i) {
+            swap(content[i], content[least]);
+            minHeapify(least);
         }
     }
 
-    void buildMaxHeap() {
-        for (long long int i = (heap_size - 2) / 2; i >= 0; i--) {
-            maxHeapify(i); // Восстанавливаем кучу для всех родительских узлов
+    void maxHeapify(long long i){
+        long long greatest = i;
+        long long l = left(i);
+        long long r = right(i);
+
+        if (l < heap_size && content[l] > content[greatest])
+            greatest = l;
+        if (r < heap_size && content[r] > content[greatest])
+            greatest = r;
+        if (greatest != i) {
+            swap(content[i], content[greatest]);
+            maxHeapify(greatest);
         }
     }
 
-    long long int extractMin() {
-        // Извлекаем минимальный элемент (корень)
-        if (heap_size < 1) {
-            throw out_of_range("Heap is empty");
+    void buildMaxHeap(){
+        for(long long i = (heap_size / 2) - 1; i>= 0; i--){
+            maxHeapify(i);
         }
-        long long int minValue = content[0];
-        content[0] = content[heap_size - 1]; // Ставим последний элемент на место корня
-        heap_size--; // Уменьшаем размер кучи
-        maxHeapify(0); // Восстанавливаем кучу
-        return minValue; // Возвращаем минимальный элемент
     }
 
-    void insert(long long int value) {
-        // Добавляем новый элемент в кучу
-        content[heap_size] = value; // Ставим элемент в конец
-        heap_size++; // Увеличиваем размер кучи
-        buildMaxHeap(); // Восстанавливаем кучу
+    void buildMinHeap() {
+        for (long long i = (heap_size / 2) - 1; i >= 0; i--) {
+            minHeapify(i);
+        }
     }
 
-    long long int getHeapSize() {
-        return heap_size; // Возвращаем текущий размер кучи
+    int extractMin() {
+        
+        long long root = content[0];
+        content[0] = content[heap_size - 1];
+        heap_size--;
+        minHeapify(0);
+
+        return root;
+        
+    }
+    long long extractMax(int i) {
+        long long root = content[i];
+        // content[0] = content[heap_size - 1];
+        // content[heap_size - 1] = root;
+
+        // heap_size--;
+
+        // maxHeapify(i);
+        return root;
+    }
+
+
+    bool isEmpty() {
+        return heap_size == 0;
+    }
+
+    int heap_siz1e(){
+        return heap_size;
+    }
+
+    void print(){
+        for(int i = 0; i < arr_size; i++){
+            cout << content[i] << ' ';
+        }
+        
+    }
+    void start(){
+        for (long long int i = 0; i < arr_size; i++)
+        {
+            content[i]=0;
+        }
+        
+    }
+    
+
+    
+    void insertKey(int key) {
+        content[heap_size] = key;
+        heap_size++;
+        quick_sort(content,0,heap_size);
+    }
+
+    void printmax(int k){
+        // int size = heap_size;
+        long long totalsum = 0;
+
+        for (int i = 0; i < k && heap_size > 0; i++) {
+            
+            long long int maxElem = extractMax(i);
+            // cout << maxElem << endl;
+            totalsum += maxElem;
+        
+
+        }
+        // heap_size = size;
+
+        cout << totalsum << endl;
+        
     }
 };
 
 int main() {
-    long long int n;
-    cin >> n; // Считываем количество массивов
-
-    long long int* arr = new long long int[n]; // Создаём массив для хранения размеров массивов
-    for (long long int i = 0; i < n; i++) {
-        cin >> arr[i]; // Считываем размеры массивов
+    int n, k;
+    cin >> n >> k;
+    int t;
+    if (n>k){
+        t=n;
+    }else{
+        t=k;
+    }
+    Heap myheap(t);
+    string s; 
+    int elem;
+    myheap.start();
+    // myheap.print();
+    // vector<long long> res;
+    for(int i = 0; i < n; i++){
+        cin >> s;
+        if(s == "print"){
+            if(myheap.isEmpty()){
+                // res.push_back(0);
+                cout << 0 << endl;
+            }
+            else{
+                // res.push_back(myheap.printmax(k));
+                myheap.printmax(k);
+            }
+        }
+        else{
+            cin >> elem;
+            myheap.insertKey(elem);
+        }
     }
 
-    Heap myHeap(arr, n); // Создаём кучу с размерами массивов
-    long long int totalCost = 0; // Переменная для хранения общей стоимости
-
-    // Пока в куче больше одного элемента
-    while (myHeap.getHeapSize() > 1) {
-        // Извлекаем два наименьших элемента
-        long long int firstMin = myHeap.extractMin(); // Минимальный
-        long long int secondMin = myHeap.extractMin(); // Второй минимальный
-
-        // Считаем стоимость объединения
-        long long int mergeCost = firstMin + secondMin;
-        totalCost += mergeCost; // Добавляем к общей стоимости
-
-        // Вставляем результат обратно в кучу
-        myHeap.insert(mergeCost);
-    }
-
-    cout << totalCost; // Выводим общую стоимость
-
-    delete[] arr; // Освобождаем память
+    myheap.print();
+    
     return 0;
 }
