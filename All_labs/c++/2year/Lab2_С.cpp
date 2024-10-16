@@ -5,6 +5,10 @@ class Node{
 public:
 	int value;
 	Node *Next;
+    Node(){
+        value=0;
+        Next=nullptr;
+    }
 };
 
 void out(Node *n, int a){
