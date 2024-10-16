@@ -3,8 +3,10 @@ ALTER TABLE passengers ADD CHECK ( extract(year from AGE(date_of_birth))>10 );
 --2
 ALTER TABLE booking ADD CHECK ( price>0 AND price<50000 );
 --3
+DELETE FROM baggage WHERE NOT (weight_in_kg BETWEEN 1 and 23);
 ALTER TABLE baggage ADD CHECK ( weight_in_kg BETWEEN 1 and 23);
 --4
+DELETE FROM airport WHERE NOT ( length(airport_name)>10);
 ALTER TABLE airport ADD CHECK ( length(airport_name)>10);
 --5
 ALTER TABLE airline ADD UNIQUE (airline_name);
@@ -18,9 +20,18 @@ ALTER TABLE flights ADD UNIQUE(flight_id);
 ALTER TABLE passengers ADD UNIQUE(passport_number);
 ALTER TABLE security_check ADD UNIQUE(security_check_id);
 --6
+ALTER TABLE booking
+DROP CONSTRAINT fk_booking_passenger;
+DELETE FROM passengers WHERE NOT ((gender='Male' AND extract(year from AGE(date_of_birth))>18) OR
+                                  (gender='Female' AND extract(year from AGE(date_of_birth))>19));
+
 ALTER TABLE passengers ADD CHECK ((gender='Male' AND extract(year from AGE(date_of_birth))>18) OR
                                   (gender='Female' AND extract(year from AGE(date_of_birth))>19));
 --7
+DELETE FROM passengers WHERE NOT ((country_of_citizenship='Kazakhstan' AND extract(year from AGE(date_of_birth))>18) OR
+                                  (country_of_citizenship='France' AND extract(year from AGE(date_of_birth))>17) OR
+                                  (country_of_citizenship NOT IN('Kazakhstan','France') AND extract(year from AGE(date_of_birth))>19));
+
 ALTER TABLE passengers ADD CHECK ((country_of_citizenship='Kazakhstan' AND extract(year from AGE(date_of_birth))>18) OR
                                   (country_of_citizenship='France' AND extract(year from AGE(date_of_birth))>17) OR
                                   (country_of_citizenship NOT IN('Kazakhstan','France') AND extract(year from AGE(date_of_birth))>19));
