@@ -1,52 +1,77 @@
 #include <iostream>
-#include <queue>
 #include <string>
+#include <vector>
+#include <algorithm>
+#include <iomanip>
 
 using namespace std;
 
-class CookieManager {
-private:
-    priority_queue<long long, vector<long long>, greater<long long> > minHeap;
-    int maxBoxes;
+struct student {
+    string last_name;
+    string first_name;
+    double GPA;
 
-public:
-    CookieManager(int k) : maxBoxes(k) {}
-
-    void insert(long long n) {
-        if (minHeap.size() < maxBoxes) {
-            minHeap.push(n);
-        } else if (n > minHeap.top()) {
-            minHeap.pop();
-            minHeap.push(n);
-        }
-    }
-
-    long long getMaxSum() {
-        long long sum = 0;
-        priority_queue<long long, vector<long long>, greater<long long> > tempHeap = minHeap;
-        while (!tempHeap.empty()) {
-            sum += tempHeap.top();
-            tempHeap.pop();
-        }
-        return sum;
+    void print() {
+        cout << last_name << " " << first_name << " " << fixed << setprecision(3) << GPA << endl;
     }
 };
 
-int main() {
-    int q, k;
-    cin >> q >> k;
-    CookieManager cookieManager(k);
-    string command;
-    long long n;
+bool compare(const student &a, const student &b) {
+    if (a.GPA != b.GPA) {
+        return a.GPA < b.GPA;
+    } else if (a.last_name != b.last_name) {
+        return a.last_name < b.last_name;
+    } else {
+        return a.first_name < b.first_name;
+    }
+}
 
-    for (int i = 0; i < q; ++i) {
-        cin >> command;
-        if (command == "print") {
-            cout << cookieManager.getMaxSum() << endl;
-        } else if (command == "insert") {
-            cin >> n;
-            cookieManager.insert(n);
+double calcGPA(int m) {
+    double g1;
+    double sum = 0;
+    double sum1 = 0;
+    string g;
+    double c;
+    for (int i = 0; i < m; i++) {
+        cin >> g >> c;
+        if (g == "A+") {
+            g1 = 4.000;
+        } else if (g == "A") {
+            g1 = 3.750;
+        } else if (g == "B+") {
+            g1 = 3.500;
+        } else if (g == "B") {
+            g1 = 3.000;
+        } else if (g == "C+") {
+            g1 = 2.500;
+        } else if (g == "C") {
+            g1 = 2.000;
+        } else if (g == "D+") {
+            g1 = 1.500;
+        } else if (g == "D") {
+            g1 = 1.000;
+        } else {
+            g1 = 0.000;
         }
+        sum += g1 * c;
+        sum1 += c;
+    }
+    return sum / sum1;
+}
+
+int main() {
+    int n, m;
+    cin >> n;
+    vector<student> st(n);
+    for (int i = 0; i < n; i++) {
+        cin >> st[i].last_name >> st[i].first_name >> m;
+        st[i].GPA = calcGPA(m);
+    }
+
+    sort(st.begin(), st.end(), compare);
+
+    for (int i = 0; i < n; i++) {
+        st[i].print();
     }
 
     return 0;
