@@ -47,12 +47,26 @@ FROM passengers
 WHERE extract(year from AGE(passengers.date_of_birth))<18;
 
 --8
-SELECT (first_name,last_name) AS full_name, passport_number, flights.actual_arrival
+SELECT (first_name,last_name) AS full_name, passport_number, flights.actual_arrival,country
 FROM passengers
-    JOIN flights on passengers.flight_no=flights.flight_no;
+    JOIN flights on passengers.flight_no=flights.flight_no
+    JOIN airport on flights.arrival_airport_id=airport.airport_id;
 
 --9
 SELECT flights.flight_id, flights.flight_no,(SELECT country FROM airport where airport.airport_id=flights.departure_airport_id)AS first,(SELECT country FROM airport where airport.airport_id=flights.arrival_airport_id) as second
 FROM flights
     JOIN airport on flights.departure_airport_id=airport.airport_id
 WHERE (SELECT country FROM airport where airport.airport_id=flights.departure_airport_id)=(SELECT country FROM airport where airport.airport_id=flights.arrival_airport_id);
+--COUNT pass TO CHINA
+SELECT count(passengers.passenger_id) AS count
+FROM passengers
+JOIN booking on booking.passenger_id=passengers.passenger_id
+JOIN flights on flights.flight_id=booking.flight_id
+JOIN airport on flights.arrival_airport_id=airport.airport_id
+WHERE country='China';
+--female pass ,who booked the most exp
+SELECT passengers.passenger_id, (first_name,last_name) AS full_name, gender, price
+FROM passengers
+JOIN booking on booking.passenger_id=passengers.passenger_id
+WHERE gender='Female'
+ORDER BY price desc LIMIt 1;
