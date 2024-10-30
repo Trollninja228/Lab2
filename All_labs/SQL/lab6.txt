@@ -1,0 +1,58 @@
+--1
+SELECT flight_id, flight_no, airline.airline_name
+FROM flights
+    JOIN airline ON flights.airline_id = airline.airline_id
+WHERE airline_name='PIR';
+
+--2
+SELECT flight_id, flight_no, flights.departure_airport_id, airport.airport_id
+FROM flights
+    JOIN airport ON airport.airport_id = flights.departure_airport_id;
+
+--3
+SELECT airline.airline_id, airline_name,flights.flight_no,
+       extract(month from flights.scheduled_arrival) AS arr,
+       extract(month from flights.scheduled_departure) AS dep
+FROM airline
+    JOIN flights ON flights.airline_id = airline.airline_id
+WHERE extract(month from flights.scheduled_arrival)!=11 AND extract(month from flights.scheduled_departure)!=11 ;
+
+--4
+SELECT DISTINCT passenger_id, (first_name, last_name)AS full_name, flights.flight_no
+FROM passengers
+    JOIN flights on passengers.flight_no=flights.flight_no
+WHERE flights.flight_no ='US-MS';
+
+--5
+SELECT flights.flight_id, flights.flight_no,
+       AVG(booking.price), sum(booking.price), max(booking.price), min(booking.price)
+FROM flights
+    JOIN booking on booking.flight_id=flights.flight_id
+GROUP BY flights.flight_id
+ORDER BY flights.flight_id;
+
+--6
+SELECT DISTINCT flight_id,flight_no,airport.country
+FROM flights
+    JOIN airline on flights.airline_id=airline.airline_id
+    JOIN airport on  flights.departure_airport_id=airport.airport_id
+WHERE airport.country='China'
+ORDER BY flight_id;
+
+--7
+SELECT (first_name,last_name) AS full_name,extract(year from AGE(passengers.date_of_birth)) as Age, airport.country
+FROM passengers
+    JOIN flights on passengers.flight_no=flights.flight_no
+    JOIN airport on flights.departure_airport_id=airport.airport_id
+WHERE extract(year from AGE(passengers.date_of_birth))<18;
+
+--8
+SELECT (first_name,last_name) AS full_name, passport_number, flights.actual_arrival
+FROM passengers
+    JOIN flights on passengers.flight_no=flights.flight_no;
+
+--9
+SELECT flights.flight_id, flights.flight_no,(SELECT country FROM airport where airport.airport_id=flights.departure_airport_id)AS first,(SELECT country FROM airport where airport.airport_id=flights.arrival_airport_id) as second
+FROM flights
+    JOIN airport on flights.departure_airport_id=airport.airport_id
+WHERE (SELECT country FROM airport where airport.airport_id=flights.departure_airport_id)=(SELECT country FROM airport where airport.airport_id=flights.arrival_airport_id);
