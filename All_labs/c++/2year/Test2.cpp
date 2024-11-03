@@ -1,70 +1,144 @@
 #include <iostream>
-#include <climits>
+#include <string>
+#include <cmath>
+
 using namespace std;
 
-// Функция для слияния двух отсортированных частей массива
-void merge(int *arr, int beg, int mid, int end) {
-    int n1 = mid - beg + 1;
-    int n2 = end - mid;
-
-    // Создаем временные массивы
-    int *left = new int[n1 + 1];
-    int *right = new int[n2 + 1];
-
-    // Копируем данные в временные массивы
-    for (int i = 0; i < n1; i++) {
-        left[i] = arr[beg + i];
+class Node {
+private:
+    string data;
+    Node* next;
+public:
+    Node(string data) {
+        this->data = data;
+        next = nullptr;
     }
-    for (int j = 0; j < n2; j++) {
-        right[j] = arr[mid + 1 + j];
+    string getData() {
+        return data;
+    }
+    Node* getNext() {
+        return next;
     }
 
-    // Добавляем "сентинельные" значения (INT_MAX)
-    left[n1] = INT_MAX;
-    right[n2] = INT_MAX;
+    void setData(string data) {
+        this->data = data;
+    }
 
-    // Индексы для слияния
-    int i = 0, j = 0;
-    for (int k = beg; k <= end; k++) {
-        if (left[i] <= right[j]) {
-            arr[k] = left[i];
-            i++;
+    void setNext(Node* next) {
+        this->next = next;
+    }
+};
+
+class List {
+private:
+    Node* head;
+public:
+    List() {
+        head = nullptr;
+    }
+    void clear(Node* node) {
+        if (node) {
+            if (node->getNext())
+                clear(node->getNext());
+            delete node;
+        }
+    }
+    ~List() {
+        clear(head);
+    }
+    void insert(string s) {
+        Node* newNode = new Node(s);
+        if (head == nullptr) {
+            head = newNode;
         } else {
-            arr[k] = right[j];
-            j++;
+            Node* curr = head;
+            while (curr->getNext()) {
+                curr = curr->getNext();
+            }
+            curr->setNext(newNode);
+        }
+    }
+    void print() {
+        Node* curr = head;
+        while (curr) {
+            cout << curr->getData() << "<=>";
+            curr = curr->getNext();
+        }
+        cout << endl;
+    }
+    Node* search(string s) {
+        if (head) {
+            Node* curr = head;
+            while (curr) {
+                if (curr->getData() == s)
+                    return curr;
+                curr = curr->getNext();
+            }
+        }
+        return nullptr;
+    }
+};
+
+class HashTable {
+private:
+    List* content;
+    int m;
+public:
+    HashTable(int size) {
+        content = new List[size];
+        m = size;
+    }
+    ~HashTable() {
+        delete[] content;
+    }
+
+    long long calculate_hash(const string& s) {
+        const long long MOD = 1e9 + 7; // Define MOD as long long
+        long long hash_value = 0;
+        for (char ch : s) {
+            hash_value = (hash_value + (static_cast<int>(ch) - 47)) % MOD;
+        }
+        hash_value = (hash_value * (11 * 11)) % MOD; // 11^2
+        return hash_value;
+    }
+
+    void insert(string s) {
+        content[calculate_hash(s) % m].insert(s); // Ensure index is within bounds
+    }
+
+    void print() {
+        for (int i = 0; i < m; i++) {
+            content[i].print();
         }
     }
 
-    // Освобождаем память
-    delete[] left;
-    delete[] right;
-}
-
-// Рекурсивная функция для сортировки слиянием
-void mergeSort(int *arr, int beg, int end) {
-    if (beg < end) {
-        int mid = (beg + end) / 2;
-
-        // Сортируем первую и вторую половины
-        mergeSort(arr, beg, mid);
-        mergeSort(arr, mid + 1, end);
-
-        // Сливаем отсортированные части
-        merge(arr, beg, mid, end);
+    Node* search(string s) {
+        return content[calculate_hash(s) % m].search(s);
     }
-}
+};
 
 int main() {
-    int arr[7] = {38, 27, 43, 3, 9, 82, 10};
-    int n = 7;
+    HashTable h(100); // Increased size for better distribution
 
-    mergeSort(arr, 0, n - 1);
+    // Sample strings to insert
+    string items[] = {"111", "266", "123456789", "93085", "334368200", "100000"};
 
-    // Вывод отсортированного массива
-    for (int i = 0; i < n; i++) {
-        cout << arr[i] << " ";
+    // Insert each item into the hash table
+    for (const auto& item : items) {
+        h.insert(item);
     }
-    cout << endl;
+
+    // Print all items in the hash table
+    // h.print();
+
+    // Check for specific hashes
+    string checkItems[] = {"111", "123456789", "93085", "266", "334368200", "100000"};
+    for (const auto& item : checkItems) {
+        Node* result = h.search(item);
+        if (result) {
+            cout << "Hash of string \"" << item << "\" is " << h.calculate_hash(item) << endl;
+        }
+    }
 
     return 0;
 }
