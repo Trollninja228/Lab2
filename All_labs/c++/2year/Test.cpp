@@ -1,15 +1,25 @@
 #include <iostream>
-#include <string>
 #include <cmath>
+#include <string>
+
 using namespace std;
 
-const long long MOD = 1e9 + 7;
-
 class Node {
-public:
+private:
     string data;
     Node* next;
+public:
     Node(string data) : data(data), next(nullptr) {}
+    
+    string getData() {
+        return data;
+    }
+    Node* getNext() {
+        return next;
+    }
+    void setNext(Node* next) {
+        this->next = next;
+    }
 };
 
 class List {
@@ -17,94 +27,94 @@ private:
     Node* head;
 public:
     List() : head(nullptr) {}
-    ~List() {
-        while (head) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
-        }
-    }
+    
     void insert(string s) {
         Node* newNode = new Node(s);
-        newNode->next = head;
-        head = newNode;
+        if (!head) {
+            head = newNode;
+        } else {
+            Node* curr = head;
+            while (curr->getNext()) {
+                curr = curr->getNext();
+            }
+            curr->setNext(newNode);
+        }
     }
-    bool search(string s) {
+
+    bool isEmpty() const {
+        return head == nullptr;
+    }
+    
+    Node* search(string s) {
         Node* curr = head;
         while (curr) {
-            if (curr->data == s) return true;
-            curr = curr->next;
+            if (curr->getData() == s) return curr;
+            curr = curr->getNext();
         }
-        return false;
+        return nullptr;
     }
+    
     string getFirst() {
-        return head ? head->data : "";
+        return head->getData();
     }
 };
 
 class HashTable {
 private:
-    List* table;
-    unsigned long long size;
+    List* content;
+    long long int m;
 public:
-    HashTable(unsigned long long size) : size(size) {
-        table = new List[size];
+    HashTable(long long int size) : m(size) {
+        content = new List[size];
     }
     ~HashTable() {
-        delete[] table;
+        delete[] content;
     }
-    unsigned long long power(unsigned long long a, unsigned long long b) {
-        unsigned long long result = 1;
-        a = a % MOD;
-        while (b > 0) {
-            if (b % 2 == 1) {
-                result = (result * a) % MOD;
-            }
-            a = (a * a) % MOD;
-            b /= 2;
+
+    long long int hash(string s) {
+        long long int sum = 0;
+        long long int base = 1;
+        for (long long int i = 0; i < s.length(); i++) {
+            sum += ((int(s[i]) - 47) * base);
+            base = (base * 11) % 1000000007;
         }
-        return result;
+        return sum % m;
     }
-    unsigned long long hash(string s) {
-        unsigned long long sum = 0;
-        for (unsigned long long i = 0; i < s.length(); i++) {
-            sum = (sum + (s[i] - 47) * power(11, i)) % MOD;
-        }
-        return sum % size;
-    }
+
     void insert(string s) {
-        table[hash(s)].insert(s);
+        content[hash(s)].insert(s);
     }
-    bool search(string s) {
-        return table[hash(s)].search(s);
+
+    bool comp_hash_string(string s) {
+        return !content[stoi(s) % m].isEmpty();
+    }
+    
+    void check(int n, string* id) {
+        for (long long int i = 0; i < 2 * n; i++) {
+            if (id[i].length() < 19) {
+                if (comp_hash_string(id[i])) {
+                    long long int idx = stoi(id[i]) % m;
+                    string data = content[idx].getFirst();
+                    if (!data.empty()) {
+                        cout << "Hash of string \"" << data << "\" is " << id[i] << endl;
+                    } else {
+                        cout << "Hash of string \"\" is " << id[i] << endl;
+                    }
+                }
+            }
+        }
     }
 };
 
 int main() {
-    unsigned long long n;
+    HashTable h(10000);
+    long long int n;
     cin >> n;
-    cin.ignore();
-
-    string arr[2 * n];
-    HashTable hashTable(1000000);
-
-    for (unsigned long long i = 0; i < 2 * n; i++) {
-        getline(cin, arr[i]);
+    string id[2 * n];
+    for (long long int i = 0; i < 2 * n; i++) {
+        cin >> id[i];
+        h.insert(id[i]);
     }
-
-    for (unsigned long long i = 0; i < 2 * n; i++) {
-        hashTable.insert(arr[i]);
-    }
-
-    for (unsigned long long i = 0; i < 2 * n; i++) {
-        long long t = hashTable.hash(arr[i]);
-        string hash_str = to_string(t);
-        if (hashTable.search(hash_str)) {
-            cout<<"ANS "<<arr[i]<<endl;
-            cout << "Hash of string \"" << arr[i] << "\" is " << t << endl;
-        }
-        
-    }
-
+    h.check(n, id);
     return 0;
 }

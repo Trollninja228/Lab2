@@ -1,142 +1,72 @@
 #include <iostream>
+#include <vector>
+#include <unordered_map>
 #include <string>
-#include <cmath>
+#include <algorithm>
 
 using namespace std;
 
-class Node {
-private:
-    string data;
-    Node* next;
-public:
-    Node(string data) {
-        this->data = data;
-        next = nullptr;
-    }
-    string getData() {
-        return data;
-    }
-    Node* getNext() {
-        return next;
+const long long MOD = 1e9 + 7;
+
+// Function to compute the hash based on the provided formula
+long long compute_hash(const string& s) {
+    long long hash_value = 0;
+    long long power_of_11 = 1; // To calculate 11^i
+
+    for (size_t i = 0; i < s.length(); i++) {
+        hash_value = (hash_value + (s[i] - '0') * power_of_11) % MOD;
+        power_of_11 = (power_of_11 * 11) % MOD; // Update 11^i
     }
 
-    void setData(string data) {
-        this->data = data;
-    }
-
-    void setNext(Node* next) {
-        this->next = next;
-    }
-};
-
-class List {
-private:
-    Node* head;
-public:
-    List() {
-        head = nullptr;
-    }
-    void clear(Node* node) {
-        if (node) {
-            if (node->getNext())
-                clear(node->getNext());
-            delete node;
-        }
-    }
-    ~List() {
-        clear(head);
-    }
-    void insert(string s) {
-        Node* newNode = new Node(s);
-        if (head == nullptr) {
-            head = newNode;
-        } else {
-            Node* curr = head;
-            while (curr->getNext()) {
-                curr = curr->getNext();
-            }
-            curr->setNext(newNode);
-        }
-    }
-    void print() {
-        Node* curr = head;
-        while (curr) {
-            cout << curr->getData() << "<=>";
-            curr = curr->getNext();
-        }
-        cout << endl;
-    }
-    Node* search(string s) {
-        if (head) {
-            Node* curr = head;
-            while (curr) {
-                if (curr->getData() == s)
-                    return curr;
-                curr = curr->getNext();
-            }
-        }
-        return nullptr;
-    }
-};
-
-class HashTable {
-private:
-    List* content;
-    int m;
-public:
-    HashTable(int size) {
-        content = new List[size];
-        m = size;
-    }
-    ~HashTable() {
-        delete[] content;
-    }
-
-    long long calculate_hash(const string& s) {
-        const long long MOD = 1e9 + 7; // Define MOD as long long
-        long long hash_value = 0;
-        for (char ch : s) {
-            hash_value = (hash_value + (static_cast<int>(ch) - 47)) % MOD;
-        }
-        hash_value = (hash_value * (11 * 11)) % MOD; // 11^2
-        return hash_value;
-    }
-
-    void insert(string s) {
-        content[calculate_hash(s) % m].insert(s); // Ensure index is within bounds
-    }
-
-    void print() {
-        for (int i = 0; i < m; i++) {
-            content[i].print();
-        }
-    }
-
-    Node* search(string s) {
-        return content[calculate_hash(s) % m].search(s);
-    }
-};
+    return (hash_value * -47) % MOD; // Applying the formula and returning the correct hash
+}
 
 int main() {
-    HashTable h(100); // Increased size for better distribution
-
-    // Sample strings to insert
-    string items[] = {"111", "266", "123456789", "93085", "334368200", "100000"};
-
-    // Insert each item into the hash table
-    for (const auto& item : items) {
-        h.insert(item);
+    int N;
+    cin >> N;
+    vector<string> inputs(2 * N);
+    
+    for (int i = 0; i < 2 * N; i++) {
+        cin >> inputs[i]; // Read all strings and hashes
     }
 
-    // Print all items in the hash table
-    // h.print();
+    unordered_map<long long, string> hash_to_string; // Maps hash values to strings
+    unordered_map<string, long long> string_to_hash; // Maps strings to their hash values
 
-    // Check for specific hashes
-    string checkItems[] = {"111", "123456789", "93085", "266", "334368200", "100000"};
-    for (const auto& item : checkItems) {
-        Node* result = h.search(item);
-        if (result) {
-            cout << "Hash of string \"" << item << "\" is " << h.calculate_hash(item) << endl;
+    // Process the inputs to compute hashes for strings
+    for (int i = 0; i < 2 * N; i++) {
+        const string& s = inputs[i];
+        // Check if the string is composed only of digits
+        if (all_of(s.begin(), s.end(), ::isdigit)) {
+            long long hash_value = compute_hash(s);
+            string_to_hash[s] = hash_value; // Store the hash for the string
+            hash_to_string[hash_value] = s; // Also map the computed hash back to the string
+        } else {
+            try {
+                long long hash_value = stoll(s); // Convert the input to a long long
+                hash_to_string[hash_value] = ""; // Placeholder for the string
+            } catch (...) {
+                continue; // If conversion fails, skip (should not happen as per the problem statement)
+            }
+        }
+    }
+
+    // Output the results in the order of original input
+    for (int i = 0; i < 2 * N; i++) {
+        const string& s = inputs[i];
+        if (all_of(s.begin(), s.end(), ::isdigit)) {
+            long long hash_value = string_to_hash[s]; // Get the hash value of the string
+            cout << "Hash of string \"" << s << "\" is " << hash_value << endl;
+        } else {
+            try {
+                long long hash_value = stoll(s);
+                if (hash_to_string.find(hash_value) != hash_to_string.end()) {
+                    // Print the corresponding string for the hash
+                    cout << "Hash of string \"" << hash_to_string[hash_value] << "\" is " << s << endl;
+                }
+            } catch (...) {
+                continue; // If conversion fails, skip (should not happen as per the problem statement)
+            }
         }
     }
 

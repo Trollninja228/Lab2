@@ -30,8 +30,6 @@ public:
     }
 };
 
-
-
 class List
 {
 private:
@@ -66,10 +64,11 @@ public:
     void print(){
         Node* curr = head;
         while(curr){
-            cout<<curr->getData()<<"<=>";
+            cout << curr->getData()<<" ";
             curr = curr->getNext();
+            if (curr) cout << "<=> ";
         }
-        cout<<endl;
+        // cout << endl;
     }
     Node* search(string s){
         if(head){
@@ -97,14 +96,22 @@ public:
     ~HashTable(){
         delete[] content;
     }
-
+    // int hash(string s){
+    //     int sum = 0;
+    //     for (int i = 0; i < s.length(); i++)
+    //     {
+    //         sum+= s.at(i)*pow(128,i);
+    //     }
+    //     return sum%m;
+    // }
     int hash(string s){
         int sum = 0;
-        for (int i = 0; i < s.length(); i++)
-        {
-            sum+= s.at(i)*pow(128,i);
+        int base = 1;
+        for (int i = 0; i < s.length(); i++) {
+            sum = (sum + int(s[i]) * base) % m;
+            base = (base * 128) % m;
         }
-        return sum%m;
+        return sum % m;
     }
 
     void insert(string s){
@@ -112,8 +119,7 @@ public:
     }
 
     void print(){
-        for (int i = 0; i < m; i++)
-        {
+        for (int i = 0; i < m; i++) {
             content[i].print();
         }
     }
@@ -124,23 +130,23 @@ public:
     }
 };
 
-
-
-
-
-
 int main(){
-   
     HashTable h(10);
-
-    h.insert("ha");
-    h.insert("he");
-    h.insert("ho");
-    h.insert("hu");
-
+    string slow;
+    for (int i = 0; i < 3; i++)
+    {
+        cin>>slow;
+        
+        h.insert(slow);
+    }
     h.print();
 
-    cout<<h.search("he")->getData();
+    Node* result = h.search("he");
+    if (result) {
+        cout << "Found: " << result->getData() << endl;
+    } else {
+        cout << "Not found" << endl;
+    }
 
     return 0;
 }
