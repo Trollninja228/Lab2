@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <unordered_set>
-
+#include <algorithm>
 using namespace std;
 
 long long int hash_rolling(const string &s, long long int p, long long int m) {
@@ -56,7 +56,6 @@ int main() {
             ++common_positions;
         }
     }
-
     cout << common_positions;
     return 0;
 }

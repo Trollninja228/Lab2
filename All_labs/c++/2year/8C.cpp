@@ -42,7 +42,7 @@ vector<int> rabin_karp(string text, string pattern, int p) {
         hash_i = (((hash_i - ((int)text.at(i - 1)%p)) * pow_store) * 128 % p + text.at(i + m - 1)) % p;
         if (hash_i == target_hash) {
             if (text.substr(i, m) == pattern)
-                cout << i << ' '<<m << endl;
+                cout << i << ' '<<m << ' ' << text.substr(i, m) << endl;
                 positions.push_back(i);
         }
     }

@@ -1,0 +1,60 @@
+--1
+CREATE INDEX idx_flights ON flights(actual_departure);
+
+--2
+CREATE UNIQUE INDEX idx_flights_flightno_scheduleddeparture ON flights( flight_no, scheduled_departure);
+
+--3
+CREATE INDEX idx_flights_departure_arrival ON flights(departure_airport_id, arrival_airport_id);
+
+--4
+DROP INDEX idx_flights;
+
+EXPLAIN ANALYZE
+SELECT * FROM flights
+WHERE actual_departure = '2024-05-01';
+
+CREATE INDEX idx_flights ON flights(actual_departure);
+
+EXPLAIN ANALYZE
+SELECT * FROM flights
+WHERE actual_departure = '2024-05-01';
+
+--5
+EXPLAIN ANALYZE
+SELECT flight_id, departure_airport.airport_name, arrival_airport.airport_name
+FROM flights
+JOIN airport AS departure_airport ON flights.departure_airport_id = departure_airport.airport_id
+JOIN airport AS arrival_airport ON flights.arrival_airport_id = arrival_airport.airport_id
+WHERE departure_airport.airport_name = 'JFK International Airport'
+  AND arrival_airport.airport_name = 'Heathrow Airport';
+
+--6
+CREATE UNIQUE INDEX idx_passportnumber ON passengers(passport_number);
+
+INSERT INTO passengers(passenger_id, first_name, last_name, passport_number, date_of_birth, country_of_citizenship)
+VALUES (201, 'Alice', 'Johnson', 'P1234567', '1990-04-15', 'USA');
+
+INSERT INTO passengers(passenger_id, first_name, last_name, passport_number, date_of_birth, country_of_citizenship)
+VALUES (202, 'Bob', 'Smith', 'P7654321', '1985-08-22', 'Canada');
+
+--NON UNIQUE passport number
+INSERT INTO passengers(passenger_id, first_name, last_name, passport_number, date_of_birth, country_of_citizenship)
+VALUES (203, 'Charlie', 'Brown', 'P1234567', '1992-12-05', 'UK');
+
+--7
+CREATE INDEX idx_fullcheck ON passengers(first_name,last_name,date_of_birth,country_of_citizenship);
+
+EXPLAIN ANALYSE
+SELECT first_name,last_name,date_of_birth,country_of_citizenship
+FROM passengers
+WHERE country_of_citizenship='Philippines' AND date_of_birth BETWEEN '1984-01-01' AND '1984-12-31';
+
+--8
+
+SELECT indexname FROM pg_indexes WHERE indexname like 'idx%';
+
+DROP INDEX idx_flights_departure_arrival;
+DROP INDEX idx_flights;
+DROP INDEX idx_passportnumber;
+DROP INDEX idx_fullcheck;
