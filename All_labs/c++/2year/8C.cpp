@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <algorithm>
 using namespace std;
 
 //written by n-n06;
@@ -70,35 +70,31 @@ int bin_search(vector<int> arr, int beg, int end, int key){
 
 int main() {
     int p = 5003;
-    string s1,s2,s3;
-    cin>>s1>>s2>>s3;
-
-    vector<int> v1 = rabin_karp(s1, s3, p);
-    vector<int> v2 = rabin_karp(s2, s3, p);
-    int sum=0;
-    // for (int i=0;i<v1.size();i++) {
-    //         cout<<v1[i]<<" ";
-    // }
-    // cout<<endl;
-    // for (int i=0;i<v2.size();i++) {
-    //         cout<<v2[i]<<" ";
-    // }
-    if (v1.size()>=v2.size()){
-        for (int i=0;i<v2.size();i++) {
-            if(bin_search(v1,0,v1.size()-1,v2[i])!=-1){
-                // cout<<endl<<v2[i]<<" ";
-                sum+=1;
-            }
-        }
-    }else{
-        for (int i=0;i<v1.size();i++) {
-            if(bin_search(v2,0,v2.size()-1,v1[i])!=-1){
-                // cout<<v1[i];
-                sum+=1;
-            }
-        }
+    string s;
+    cin>>s;
+    long long int n;
+    cin>>n;
+    vector<string> v(n);
+    vector<int> v1[n];
+    vector<int> v2(s.size());
+    for(int i=0;i<n;i++){
+        cin>>v[i];
+        v1[i]=rabin_karp(s,v[i],p);
+        v2[i]=0;
     }
     
-    // cout<<endl<<sum;
-    
+    int sum=0;
+    // for(int i=0;i<n;i++){
+    //     for(int j=0;j<v1[i].size();j++){
+    //         for(int k=0;k<){}
+    //         v2[v1[i][j]]=1;
+    //     }
+    // }
+    // cout<<sum<<" "<<s.size()<<endl;
+    int res=bin_search(v2,0,v2.size()-1,0);
+    if(res==-1){
+        cout<<"YES";
+    }else{
+        cout<<"NO";
+    }
 }
