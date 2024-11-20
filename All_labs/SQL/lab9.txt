@@ -1,0 +1,95 @@
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+--1
+BEGIN;
+DELETE FROM booking_flight
+WHERE booking_flight_id=123;
+
+DELETE FROM booking_flight
+WHERE booking_flight_id='error';
+COMMIT ;
+ROLLBACK ;
+
+--2
+BEGIN;
+UPDATE flights SET actual_departure='2024-12-01 15:30:00'
+WHERE flight_id=123;
+COMMIT;
+ROLLBACK;
+
+BEGIN;
+UPDATE flights SET actual_departure='-1'
+WHERE flight_id=123;
+COMMIT;
+ROLLBACK;
+
+--3
+BEGIN;
+UPDATE booking b SET price=price*0.9
+WHERE (SELECT flight_id FROM booking_flight WHERE flight_id=123 AND b.booking_id=booking_flight.booking_id)=123;
+COMMIT;
+ROLLBACK;
+
+BEGIN;
+UPDATE booking b SET price='error'
+WHERE (SELECT flight_id FROM booking_flight WHERE flight_id=123 AND b.booking_id=booking_flight.booking_id)=123;
+end;
+COMMIT;
+ROLLBACK;
+
+--4
+BEGIN;
+UPDATE passengers
+SET first_name = 'John', last_name = 'Doe',gender='Male'
+WHERE passenger_id = 1;
+
+UPDATE booking
+SET status = 'Male'
+WHERE passenger_id = 1;
+
+COMMIT;
+ROLLBACK;
+
+--5
+BEGIN;
+
+INSERT INTO passengers (passenger_id, first_name, last_name, date_of_birth, gender, country_of_citizenship, country_of_residence, passport_number, created_at, update_at)
+VALUES (1002, 'John', 'Doe', '1990-05-15', 'Male', 'USA', 'USA', 'P12345678', CURRENT_DATE, CURRENT_DATE);
+
+INSERT INTO booking (booking_id, passenger_id, booking_platform, created_at, update_at, status, price)
+VALUES (5002, 1002, 'Website', CURRENT_DATE, CURRENT_DATE, 'Confirmed', 199.99);
+
+COMMIT;
+rollback ;
+
+--6
+BEGIN;
+UPDATE booking b SET price=price+10
+WHERE (SELECT flight_id FROM booking_flight WHERE flight_id=123 AND b.booking_id=booking_flight.booking_id)=123;
+COMMIT;
+ROLLBACK;
+
+--7
+begin;
+UPDATE baggage
+SET weight_in_kg = 30
+WHERE booking_id = 123;
+commit;
+rollback;
+
+--8
+BEGIN;
+
+UPDATE booking
+SET price = price * 0.9
+WHERE passenger_id = 123;
+
+COMMIT;
+
+
+--9
+
+BEGIN;
+INSERT INTO flights  (flight_id) values(100000);
+UPDATE booking_flight SET flight_id=100000 where flight_id=123;
+COMMIT;
+ROLLBACK;
