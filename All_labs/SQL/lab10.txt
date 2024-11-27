@@ -1,0 +1,152 @@
+--1
+CREATE OR REPLACE PROCEDURE insert_new_flight(
+    p_flight_no VARCHAR,
+    p_departure_airport_id INTEGER,
+    p_arrival_airport_id INTEGER,
+    p_scheduled_departure TIMESTAMP,
+    p_status VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO flights (flight_no, departure_airport_id, arrival_airport_id, scheduled_departure, status)
+    VALUES (p_flight_no, p_departure_airport_id, p_arrival_airport_id, p_scheduled_departure, p_status);
+END;
+$$;
+
+--2
+CREATE OR REPLACE PROCEDURE update_flight_status(
+    p_flight_id INTEGER,
+    p_new_status varchar
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE flights
+    SET status=p_new_status
+    WHERE flight_id=p_flight_id;
+END;
+$$;
+
+--3
+CREATE OR REPLACE PROCEDURE get_flights_by_departure_airport(
+    p_departure_airport_id INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT * FROM flights
+    WHERE departure_airport_id = p_departure_airport_id;
+END;
+$$;
+
+--4
+CREATE OR REPLACE PROCEDURE calculate_avg_delay(
+    p_arrival_airport_id INTEGER,
+    OUT avg_delay INTERVAL
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT AVG(actual_arrival - scheduled_arrival)
+    INTO avg_delay
+    FROM flights
+    WHERE arrival_airport_id = p_arrival_airport_id AND actual_arrival IS NOT NULL;
+END;
+$$;
+
+--5
+CREATE OR REPLACE PROCEDURE get_passengers_by_flight(
+    p_flight_no VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT p.passenger_id, p.first_name, p.last_name
+    FROM passengers p
+    JOIN booking b ON p.passenger_id = b.passenger_id
+    JOIN booking_flight bf ON b.booking_id = bf.booking_id
+    JOIN flights f ON bf.flight_id = f.flight_id
+    WHERE f.flight_no = p_flight_no;
+END;
+$$;
+
+--6
+CREATE OR REPLACE PROCEDURE get_top_passenger()
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT p.passenger_id, p.first_name, p.last_name, COUNT(*) AS flight_count
+    FROM passengers p
+    JOIN booking b ON p.passenger_id = b.passenger_id
+    JOIN booking_flight bf ON b.booking_id = bf.booking_id
+    GROUP BY p.passenger_id, p.first_name, p.last_name
+    ORDER BY flight_count DESC
+    LIMIT 1;
+END;
+$$;
+
+--7
+CREATE OR REPLACE PROCEDURE get_flights_delayed_24hrs()
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT flight_no, departure_airport_id, arrival_airport_id
+    FROM flights
+    WHERE actual_departure - scheduled_departure > INTERVAL '24 hours';
+END;
+$$;
+
+--8
+CREATE OR REPLACE PROCEDURE count_flights_per_airline()
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT a.airline_id, a.name, COUNT(f.flight_id) AS flight_count
+    FROM airline a
+    JOIN flights f ON a.airline_id = f.airline_id
+    GROUP BY a.airline_id, a.name;
+END;
+$$;
+
+--9
+CREATE OR REPLACE PROCEDURE calculate_avg_ticket_price(
+    p_flight_no VARCHAR,
+    OUT avg_price NUMERIC
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT AVG(b.price)
+    INTO avg_price
+    FROM booking b
+    JOIN booking_flight bf ON b.booking_id = bf.booking_id
+    JOIN flights f ON bf.flight_id = f.flight_id
+    WHERE f.flight_no = p_flight_no;
+END;
+$$;
+
+--10
+CREATE OR REPLACE PROCEDURE get_highest_price_flight(
+    OUT flight_no VARCHAR,
+    OUT departure_airport VARCHAR,
+    OUT arrival_airport VARCHAR,
+    OUT max_price NUMERIC
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT f.flight_no, da.name AS departure_airport, aa.name AS arrival_airport, MAX(b.price) AS max_price
+    INTO flight_no, departure_airport, arrival_airport, max_price
+    FROM booking b
+    JOIN booking_flight bf ON b.booking_id = bf.booking_id
+    JOIN flights f ON bf.flight_id = f.flight_id
+    JOIN airport da ON f.departure_airport_id = da.airport_id
+    JOIN airport aa ON f.arrival_airport_id = aa.airport_id
+    GROUP BY f.flight_no, da.name, aa.name
+    ORDER BY max_price DESC
+    LIMIT 1;
+END;
+$$;
+
+call get_highest_price_flight();
