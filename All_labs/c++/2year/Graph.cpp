@@ -49,7 +49,7 @@ public:
     }
 
     void addEdge(int v, int u){
-        adj[v].push_back(u);
+        adj[v].pu(u);
     }
 
     void print(){
@@ -143,7 +143,7 @@ int main()
 
 
 
-
+    // g.print();
     vector<int> v = g.dfs();
 
     for (int i = 0; i < 8; i++)
