@@ -1,170 +1,131 @@
 #include <iostream>
 #include <vector>
-#include <queue>
-#include <stack>
 #include <algorithm>
+#include <numeric>
+#include <set>
+#include <map>
+
 using namespace std;
 
-
-class Graph
-{
-private:
-    vector<vector<int>> adj;
-    int size;
-    vector<int> color;
-    vector<int> discovery;
-    vector<int> finish;
-    vector<int> predecessor;
-    int dfs_time;
-
-
-    void dfs_visit(int i){
-        //store discovery time
-        dfs_time++;
-        discovery[i] = dfs_time;
-        color[i] = 1;//gray
-
-
-        for (int neighbor:adj[i])
-        {   
-            //go depth forth!
-            if(color[neighbor] == 0){
-                dfs_visit(neighbor);
-                predecessor[neighbor] = i;
-            }
-        }
-
-        //store finish time
-        dfs_time++;
-        finish[i] = dfs_time;
-        color[i] = 2;
+// Структура для ребра
+struct Edge {
+    int u, v, weight;
+    Edge(int u, int v, int weight) : u(u), v(v), weight(weight) {}
+    bool operator<(const Edge& other) const {
+        return weight < other.weight;
     }
-
-public:
-    Graph(int size){
-        this->size = size;
-        adj.resize(size);
-        color.resize(size);
-        discovery.resize(size);
-        finish.resize(size);
-        predecessor.resize(size);
-    }
-
-    void addEdge(int v, int u){
-        adj[v].push_back(u);
-    }
-    void addWatch(int v){
-        adj[v].push_back(v);
-    }
-
-    void print(){
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < adj[i].size(); j++)
-            {
-                cout<<adj[i][j]<<"|";
-            }
-            cout<<endl;
-        }
-    }
-
-    vector<int> bfs(int start){
-        vector<int> color(size,0);//0 -- white, 1 -- gray, 2 -- black
-        vector<int> discovery(size, INT_MAX);
-        vector<int> predecessor(size, -1);
-
-        queue<int> Q;
-        color[start] = 1;
-        discovery[start] = 0;
-
-        Q.push(start);
-
-        while (!Q.empty())
-        {
-            int curr = Q.front();
-            Q.pop();
-
-
-            for (int neighbor:adj[curr])
-            {
-                if(color[neighbor] == 0){
-                    color[neighbor] = 1;
-                    discovery[neighbor] = discovery[curr]+1;
-                    predecessor[neighbor] = curr;
-                    Q.push(neighbor);
-                }
-            }
-            color[curr] = 2;
-        }
-
-        return discovery;
-    }   
-
-    vector<int> dfs(){
-        //initialization
-        for (int i = 0; i < size; i++)
-        {
-            color[i] = 0;//whitewash them!
-            discovery[i] = INT_MAX;
-            finish[i] = INT_MAX;
-            predecessor[i] = -1;
-        }
-        dfs_time = 0;
-
-
-        for (int i = 0; i < size; i++)
-        {
-            if(color[i]==0){
-                dfs_visit(i);
-            }
-        }
-
-        return finish;
-    }
-    void topological_sort(){
-        dfs();
-            
-    }
-
 };
 
-
-
-int main()
-{   
-    Graph g(9);
-
-    g.addEdge(0,1);
-    g.addEdge(1,2);
-    g.addEdge(3,2);
-    g.addEdge(0,3);
-    g.addEdge(4,3);
-    g.addEdge(5,4);
-    g.addEdge(5,7);
-    g.addEdge(6,7);
-    g.addEdge(4,7);
-    g.addEdge(8, 8);
-
-
-    vector<string> names(9);
-
-    names[0] = "shirt";
-    names[1] = "tie";
-    names[2] = "jacket";
-    names[3] = "belt";
-    names[4] = "pants";
-    names[5] = "undershorts";
-    names[6] = "socks";
-    names[7] = "shoes";
-    names[8] = "watch";
-    vector<int> v = g.dfs();
-    sort(v.begin(),v.end());
-    for (int i = 8; i >=0; i--)
-    {
-        cout<<names[i] <<' ' <<  v[i]<<"|";
+// Класс для структуры данных "Объединение-Пересечение" (Union-Find)
+class UnionFind {
+public:
+    vector<int> parent, rank;
+    UnionFind(int n) {
+        parent.resize(n);
+        rank.resize(n, 0);
+        iota(parent.begin(), parent.end(), 0);
     }
-    
-    cout<<endl;
+
+    int find(int x) {
+        if (parent[x] != x) 
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+
+    bool unionSets(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        if (rootX != rootY) {
+            if (rank[rootX] > rank[rootY]) 
+                parent[rootY] = rootX;
+            else if (rank[rootX] < rank[rootY]) 
+                parent[rootX] = rootY;
+            else {
+                parent[rootY] = rootX;
+                rank[rootX]++;
+            }
+            return true;
+        }
+        return false;
+    }
+};
+
+// Функция для построения MST
+int kruskalMST(int n, vector<Edge>& edges, vector<Edge>& mstEdges) {
+    sort(edges.begin(), edges.end());
+    UnionFind uf(n);
+    int totalWeight = 0;
+    for (const auto& edge : edges) {
+        if (uf.unionSets(edge.u, edge.v)) {
+            mstEdges.push_back(edge);
+            totalWeight += edge.weight;
+        }
+    }
+    return totalWeight;
+}
+
+// Рекурсивная функция для поиска всех MST
+void findAllMSTs(int n, vector<Edge>& edges, vector<Edge>& currentTree, int currentWeight, int mstWeight, set<vector<Edge>>& allMSTs, int index) {
+    if (currentTree.size() == n - 1) {
+        if (currentWeight == mstWeight) {
+            vector<Edge> sortedTree = currentTree;
+            sort(sortedTree.begin(), sortedTree.end(), [](const Edge& a, const Edge& b) {
+                if (a.u == b.u) return a.v < b.v;
+                return a.u < b.u;
+            });
+            allMSTs.insert(sortedTree);
+        }
+        return;
+    }
+
+    for (int i = index; i < edges.size(); ++i) {
+        UnionFind uf(n);
+        for (const auto& edge : currentTree) {
+            uf.unionSets(edge.u, edge.v);
+        }
+        if (uf.unionSets(edges[i].u, edges[i].v)) {
+            currentTree.push_back(edges[i]);
+            findAllMSTs(n, edges, currentTree, currentWeight + edges[i].weight, mstWeight, allMSTs, i + 1);
+            currentTree.pop_back();
+        }
+    }
+}
+
+int main() {
+    // Граф: города и рёбра
+    vector<Edge> edges = {
+        Edge(0, 1, 2),
+        Edge(1, 2, 5),
+        Edge(2, 3, 4),
+        Edge(3, 4, 3),
+        Edge(4, 2, 6),
+        Edge(4, 5, 7),
+        Edge(5, 2, 6),
+        Edge(5, 1, 13),
+        Edge(5, 0, 7)
+    };
+
+    int n = 6; // Количество городов (вершин)
+    vector<Edge> mstEdges;
+
+    // Найдём MST с помощью алгоритма Крускала
+    int minWeight = kruskalMST(n, edges, mstEdges);
+    cout << "Минимальная длина дорог (вес MST): " << minWeight << endl;
+
+    // Найдём все минимальные остовные деревья
+    set<vector<Edge>> allMSTs;
+    void findAllMSTs(int n, vector<Edge>& edges, vector<Edge> currentTree, int currentWeight, int mstWeight, set<vector<Edge>>& allMSTs, int index);
+
+    // Вывод всех MST
+    cout << "Количество минимальных остовных деревьев: " << allMSTs.size() << endl;
+    int count = 0;
+    for (const auto& mst : allMSTs) {
+        cout << "MST #" << ++count << ":" << endl;
+        for (const auto& edge : mst) {
+            cout << "Город " << edge.u << " <-> Город " << edge.v << ", Длина: " << edge.weight << endl;
+        }
+        cout << endl;
+    }
 
     return 0;
 }
