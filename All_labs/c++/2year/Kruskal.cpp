@@ -3,7 +3,7 @@
 #include <algorithm>
 using namespace std;
 
-//undirected
+//undirected 
 class Graph{
 private:
     vector<pair<int, pair<int,int>>> edges;
