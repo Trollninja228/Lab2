@@ -31,7 +31,7 @@ private:
                 predecessor[neighbor] = i;
             }
         }
-
+ 
         //store finish time
         dfs_time++;
         finish[i] = dfs_time;
@@ -49,7 +49,7 @@ public:
     }
 
     void addEdge(int v, int u){
-        adj[v].pu(u);
+        adj[v].push_back(u);
     }
 
     void print(){
