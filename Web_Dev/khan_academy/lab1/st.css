@@ -1,0 +1,28 @@
+h1{
+    color: magenta;
+    background-color: bisque;
+    display: inline-block;
+}
+span{
+    color: red;
+}
+.class{
+    color: blue;
+    background-color: white;
+    display: block;
+}
+#lol{
+    color: brown;
+}
+#non_dec{
+    text-decoration: none;
+}
+#t1{
+    color: red;
+}
+#t2{
+    color: green;
+}
+#t3{
+    color: blue;
+}
