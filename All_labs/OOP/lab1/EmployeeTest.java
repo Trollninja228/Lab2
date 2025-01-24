@@ -1,10 +1,8 @@
 package Labs.All_labs.OOP.lab1;
-import Labs.All_labs.OOP.lab1.employee;
 
-
-public class employee_test {
+public class EmployeeTest {
     public static void main(String[] args){
-        employee emp=new employee();
+        Employee emp=new Employee();
         emp.setEmpId(101);
         emp.setName("Jane Smith");
         emp.setSSN ("012-34-5678");

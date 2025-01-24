@@ -1,12 +1,12 @@
 package Labs.All_labs.OOP.lab1;
 
-public class employee {
+public class Employee {
     public int empID;
     public String name;
     public String ssn;
     public double salary;
 
-    public employee(){
+    public Employee(){
         empID=0;
         name="None";
         ssn="None";
@@ -37,7 +37,6 @@ public class employee {
         return salary;
     }
     public static void main(String[] args){
-
     }
 }
 
