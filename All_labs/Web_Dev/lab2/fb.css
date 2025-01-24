@@ -1,0 +1,44 @@
+body{
+    background-color: gainsboro;
+}
+.v2{
+    margin-top: 150px;
+    
+    display: flex;
+}
+.Title h1{
+    margin-left: 460px;
+    color: rgb(45, 45, 249);
+    font-size: 70px;
+}
+.Text{
+    margin-top: 0px;
+    font-size: 30px;
+}
+.login{
+    border-radius: 10px;
+    margin-left: 50px;
+    margin-right: 200px;
+    background-color: white;
+}
+.fieldset{
+    width: 70%;
+    height: 70%;
+    border-radius: 10px;
+}
+.email{
+    width: 60%;
+    padding: 20px;
+}
+.password{
+    width: 60%;
+    margin-top: 10px;
+    padding: 20px;
+}
+footer{
+    margin-top: 260px;
+    background-color: white;
+}
+.ftText{
+    
+}
