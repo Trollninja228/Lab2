@@ -1,0 +1,185 @@
+body{
+    margin: 0;
+    font-family: "Segoe UI", SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+/* header */
+.Header{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    height: 60px;
+}
+.MicrosoftIMG{
+    width: 100px;
+    margin: 10px;
+    margin-left: 5%;
+}
+.MainHeaderText{
+    
+}
+.MHT{
+    text-decoration: none;
+    color: black;
+    margin-left: 20px;
+    font-size: 13px;
+}
+.MHT1{
+    text-decoration: none;
+    color: black;
+    margin-left: 500px;
+    font-size: 13px;
+}
+.MHT2{
+    text-decoration: none;
+    color: black;
+    margin-left: 20px;
+    font-size: 13px;
+}
+.MHT3{
+    text-decoration: none;
+    color: black;
+    margin-left: 50px;
+    font-size: 13px;
+}
+.MHT4{
+    text-decoration: none;
+    color: black;
+    margin-left: 50px;
+    font-size: 13px;
+}
+
+#IGlass{
+    margin-left: 5px;
+}
+
+#ICart{
+    margin-left: 5px;
+}
+
+#IAccount{
+    margin-left: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* after header firstline */
+.firstline{
+    width: 100%;
+    height: 3.625rem;
+    background-color: #0067b8;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+.firstline a{
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+
+/* https://cdn-dynmedia-1.microsoft.com/is/image/microsoftcorp/Highlight-M365-Icon-Bounce:VP5-1920x600 */
+
+/* mainpage */
+/* slider */
+.slider{
+    width: 100%;
+    height: 600px;
+    background-image: url(https://cdn-dynmedia-1.microsoft.com/is/image/microsoftcorp/Highlight-Surface-Pro-AI-11Ed-Sapphire-MC001-3000x1682:VP5-1920x600 );
+    background-repeat: no-repeat;
+    
+    
+}
+.content{
+    position: relative;
+    /* margin-top: 30px; */
+    margin: 0 150px;
+    top: 50px;
+    background-color: white;
+    width: 570.66px;
+    height: 176.39px;
+    padding: 48px;
+    box-shadow: 0 .1875rem .4375rem 0 rgba(0, 0, 0, .13), 0 .0625rem .125rem 0 rgba(0, 0, 0, .11);
+}
+.content button{
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    background-color: #0067b8;
+    border: none;
+    color: white;
+    padding: .625rem .75rem;
+    font-size: 1rem;
+    line-height: 1;
+    border-radius: .125rem;
+    cursor: pointer;
+    transition: .3s linear;
+    font-weight: 550;
+}
+.content button:hover{
+    background-color: #015391;
+}
+.content_title{
+    font-size: 2.3125rem;
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+.content_description{
+    margin-bottom: 24px;
+}
+
+/* next or prev icons */
+.next_or_prev{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+.icons i:not(.iconc){
+    font-size: 22px;
+    color: rgb(54, 54, 54);
+    
+}
+.iconc{
+    font-size: 13px;
+    
+    
+}
+
+.icons{
+    width: 230px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+
+/* shops */
+/* xbox https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/Link-List-Icons-Xbox-Games-Consoles?wid=40&hei=40 */
+
+.shop_content{
+    width: 1600px;
+    height: 104px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.sh_block{
+    margin-right: 30px;
+}
+.sh_icon img{
+    width: 50px;
+}
