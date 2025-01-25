@@ -1,5 +1,6 @@
 body{
-    background-color: gainsboro;
+    background-color: #F2F3F5;
+    margin: 0px;
 }
 .v2{
     margin-top: 150px;
@@ -10,35 +11,117 @@ body{
     margin-left: 460px;
     color: rgb(45, 45, 249);
     font-size: 70px;
+    margin-bottom: 0px;
 }
 .Text{
     margin-top: 0px;
     font-size: 30px;
 }
+
+.MainLogin{
+    text-align: center;
+}
+
 .login{
+    height: 100%;
+    box-shadow: 1px 2px 3px 1px gainsboro;
+    border: 1px solid #dddfe2;
+    width: 400px;
     border-radius: 10px;
     margin-left: 50px;
     margin-right: 200px;
     background-color: white;
+    text-align: center;
+    margin-bottom: 20px;
 }
 .fieldset{
-    width: 70%;
+    border:none;
+    width: 93%;
     height: 70%;
     border-radius: 10px;
+    text-align: center;
+    
 }
 .email{
-    width: 60%;
+    font-size: 17px;
+    border-radius: 5px;
+    border: 1px solid #dddfe2;
+    width: 88%;
     padding: 20px;
 }
 .password{
-    width: 60%;
+    font-size: 17px;
+    border-radius: 5px;
+    border: 1px solid #dddfe2;
+    background-color: white;
+    width: 88%;
     margin-top: 10px;
     padding: 20px;
 }
+
+.ButtonEnter{
+    margin-top: 10px;
+    width: 100%;
+    height: 50px;
+    background-color: #0866ff;
+    border-radius: 5px;
+    border:none;
+}
+
+.Enter{
+    color:white;
+    font-weight: bold;
+    font-size: 20px;
+    
+}
+
+.ForgetPass{
+    color: #0866ff;
+}
+
+.UnderLine{
+    border-bottom: 1px solid;
+    border-color: gainsboro;
+}
+
+.ButtonRegister{
+    margin-top: 10px;
+    width: 65%;
+    height: 50px;
+    background-color: #42b72a;
+    border-radius: 5px;
+    border:none;
+    color:white;
+    font-weight: bold;
+    font-size: 18px;
+}
+.EndText{
+    margin-right: 20%;
+}
+.EndText a{
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+}
+
 footer{
-    margin-top: 260px;
+    border:none;
+    margin-top: 230px;
     background-color: white;
+    width: 100%;
+    margin-left: 0px;
+    height: 200px;
+}
+a{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: underline;
 }
 .ftText{
-    
+    color: gray;
+}
+.preFtText{
+    text-align: left;
+    margin-left: 400px;
 }
