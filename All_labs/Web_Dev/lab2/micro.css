@@ -1,3 +1,8 @@
+a{
+    text-decoration: none;
+    color:black;
+}
+
 body{
     margin: 0;
     font-family: "Segoe UI", SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -11,6 +16,10 @@ body{
     align-items: center;
     text-align: center;
     height: 60px;
+}
+.Header a:hover{
+    text-decoration: underline solid 2px black;
+    
 }
 .MicrosoftIMG{
     width: 100px;
@@ -168,18 +177,108 @@ body{
 
 /* shops */
 /* xbox https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/Link-List-Icons-Xbox-Games-Consoles?wid=40&hei=40 */
-
+.shops{
+    margin-top: 48px;
+    margin-bottom: 48px;
+    display: flex;
+    justify-content: center;
+}
 .shop_content{
-    width: 1600px;
+    width: 1400px;
     height: 104px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 99px;
+    margin-left: 99px;
+    padding-left: 98px;
+    padding-right: 98px;
     
 }
 .sh_block{
-    margin-right: 30px;
+    margin: 16px 24px;
+    text-align: center;
 }
 .sh_icon img{
-    width: 50px;
+    width: 39px;
+}
+.sh-text a{
+    color: #0067b8;
+    text-decoration: underline;
+}
+
+
+
+
+
+.StoreImages{
+    display: flex;
+}
+/* .Store_container{
+    width: 1798.19px;
+    height: 499.7px;
+    display: flex;
+    margin: 0 91.98px;
+    padding: 0 99.094px;
+
+
+
+} */
+
+.Suggestion1{
+    cursor: pointer;
+    margin: 20px;
+    margin-left: 150px;
+    width: 20%;
+    background-color: white;
+    box-shadow: 0 .1875rem .4375rem 0 rgba(0, 0, 0, .13), 0 .0625rem .125rem 0 rgba(0, 0, 0, .11);
+}
+
+.S1IMG{
+    width: 100%;
+}
+
+.S1H{
+    margin: 10px;
+    font-weight: 500;
+}
+
+.S1T{
+    margin: 10px;
+    font-size: 18px;
+}
+
+
+
+.S1B{
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    background-color: #0067b8;
+    border: none;
+    color: white;
+    padding: .625rem .75rem;
+    font-size: 1rem;
+    border-radius: .125rem;
+    cursor: pointer;
+    font-weight: 550;
+    margin: 10px;
+
+}
+.S1B:hover{
+    background-color: #015391;
+}
+
+.newbtn{
+    background-color: #ffb900;
+    border: none;
+    cursor: pointer;
+    color: black;
+    /* width: 50px;
+    height: 20px; */
+    padding: .375em .75em;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+    margin-left: 10px;
+    margin-top: 5px;
 }
