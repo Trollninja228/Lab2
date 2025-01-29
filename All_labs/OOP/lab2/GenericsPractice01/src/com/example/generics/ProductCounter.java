@@ -6,49 +6,46 @@ import java.util.TreeMap;
 
 public class ProductCounter {
     private Map<String, Long> productCountMap = new HashMap<>();
-    private Map<String, String> productNames = new TreeMap<>();
+    private Map<String, String> productNames;
 
     public static void main(String[] args) {
-
         // List of part data
-        String[] parts = new String[]{"1S01", "1S01", "1S01", "1S01", "1S01", "1S02", "1S02", "1S02", "1H01", "1H01", "1S02", "1S01", "1S01", "1H01", "1H01", "1H01", "1S02", "1S02", "1M02", "1M02", "1M02"};
+        String[] parts = new String[]{
+            "1S01", "1S01", "1S01", "1S01", "1S01",
+            "1S02", "1S02", "1S02", "1H01", "1H01",
+            "1S02", "1S01", "1S01", "1H01", "1H01",
+            "1H01", "1S02", "1S02", "1M02", "1M02", "1M02"
+        };
 
         // Create Product Name Part Number map
         Map<String, String> productNames = new TreeMap<>();
-        productNames.put("Blue Polo Shirt", "1S01");
-        productNames.put("Black Polo Shirt", "1S02");
-        productNames.put("Red Ball Cap", "1H01");
-        productNames.put("Duke Mug   ", "1M02");
+        productNames.put("1S01", "Blue Polo Shirt");
+        productNames.put("1S02", "Black Polo Shirt");
+        productNames.put("1H01", "Red Ball Cap");
+        productNames.put("1M02", "Duke Mug");
 
         // Create Product Counter Object and process data
-        ProductCounter pc1 = new ProductCounter (productNames);
+        ProductCounter pc1 = new ProductCounter(productNames);
         pc1.processList(parts);
         pc1.printReport();
     }
 
-    public ProductCounter(Map productNames) {
+    public ProductCounter(Map<String, String> productNames) {
         this.productNames = productNames;
     }
 
     public void processList(String[] list) {
-        long curVal=0;
-        for(String ItemNumber:list){
-            if (productCountMap.containsKey(ItemNumber)){
-                curVal=productCountMap.get(ItemNumber);
-                curVal++;
-                productCountMap.put(ItemNumber,curVal);
-            }else{
-                productCountMap.put(ItemNumber,new Long(1));
-            }
+        for (String itemNumber : list) {
+            productCountMap.put(itemNumber, productCountMap.getOrDefault(itemNumber, 0L) + 1);
         }
     }
 
     public void printReport() {
         System.out.println("=== Product Report ===");
-        for(String key:productCountMap.keySet()){
-            System.out.println("Name"+key);
-            System.out.println("\t\tCount"+productCountMap.get(productNames.get(key)));
+        for (String key : productCountMap.keySet()) {
+            String name = productNames.getOrDefault(key, "Unknown Product");
+            System.out.println("Name: " + name);
+            System.out.println("\t\tCount: " + productCountMap.get(key));
         }
     }
-
 }
