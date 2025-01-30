@@ -39,7 +39,7 @@ body{
 }
 
 .main{
-    background-image: url(bg.png); 
+    background-image: url(https://static.cdninstagram.com/images/instagram/xig/homepage/phones/home-phones.png?__makehaste_cache_breaker=HOgRclNOosk); 
     background-size: 450px;
     background-repeat: no-repeat;
     height: 600px;
@@ -62,9 +62,7 @@ body{
 .info{
     position: relative;
     left: 450px;
-    /* bottom: 400px; */
     width: 350px;
-    /* border: 1px solid white; */
     z-index: -99;
     height: 410px;
 }
