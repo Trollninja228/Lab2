@@ -43,13 +43,43 @@ public class TestItemCounter {
 
         // Count the shirts
 
+        for (DukeTransaction transaction:transactions){
+            if (polos.containsKey (transaction.getProductID())) {
+                currentShirt = polos.get(transaction.getProductID()); 
+            } else {
+                System.out.println("Error: 20 Invalid part number");
+            }
+            switch (transaction.getTransactionType()) {
+                case "Purchase": currentShirt.addItems (transaction.getCount()); break; 
+                
+                case "Sale":currentShirt.removeItems (transaction.getCount()); break;
+            
+                default: System.out.println("Error: Invalid Transaction Type"); continue;
+            }
+        }
+
         // Convert to List
-
+        List<Shirt> poloList = new ArrayList<>(polos.values());
         // Init Comparators
-
+        Comparator sortDescription = new SortShirtByDesc(); 
+        Comparator sortCount = new SortShirtByCount();
         // Print Results - Sort by Description
+        Collections.sort(poloList, sortDescription);
+        System.out.println("== Inventory Report Description ===");
 
+        for (Shirt shirt: poloList) {
+            System.out.println(shirt.toString());
+        }
         // Print Results - Sort by Count
+        Collections.sort(poloList, sortCount);
+        System.out.println("=== Inventory Report - Count ===");
+
+        Collections.sort (poloList, sortCount);
+        
+        for (Shirt shirt:poloList) {
+            System.out.println(shirt.toString());
+        }
+        
 
     }
 }

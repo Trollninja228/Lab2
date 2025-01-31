@@ -11,24 +11,24 @@ public class ParenMatcher {
     public boolean processLine(String line) {
         stack.clear();
         curLine = line.toCharArray();
-        for(char c:curLine){
-            swicth (c){
-                case '(':stack.push(c);break;
+        for (char c:curLine) {
+            switch (c){
+                case'(':stack.push(c); break;
                 case ')':{
-                    if (stack.size()>0){
-                        stack.pop();
-                    }else{
-                        return false;
-                    }
-                    break;
+                if (stack.size() > 0) {
+                stack.pop();
+                } else {
+                return false;
+                }
+                break;
                 }
             }
         }
-        if(stack.size()>0){
-            return false;
-        }else{
-            return true;
-        }
+            if (stack.size() > 0) {
+                return false;
+            } else {
+                return true;
+            }  
     }
 
     public void processArray(String[] lines) {
