@@ -13,14 +13,16 @@ public class ParenMatcher {
         curLine = line.toCharArray();
         for (char c:curLine) {
             switch (c){
-                case'(':stack.push(c); break;
+                case'(':{
+                    stack.push(c); 
+                    break;}
                 case ')':{
-                if (stack.size() > 0) {
-                stack.pop();
-                } else {
-                return false;
-                }
-                break;
+                    if (stack.size() > 0) {
+                        stack.pop();
+                    } else {
+                        return false;
+                    }
+                    break;
                 }
             }
         }
@@ -46,7 +48,7 @@ public class ParenMatcher {
     public static void main(String[] args) {
         ParenMatcher pm = new ParenMatcher();
         String[] expressions = new String[4];
-
+        
         expressions[0] = "if ((a == b) && (x != y));";
         expressions[1] = "if ((a == b) && (x != y)));";
         expressions[2] = "if ((firstName.equals(newFirstName) && (lastName.equals(newLastName));";
